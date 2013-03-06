@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(:version => 20120528102124) do
     t.integer  "rating",                         :default => 0,        :null => false
     t.string   "category",         :limit => 32
     t.text     "subscribed_users"
+    t.string   "cf_vend_customer_id"
   end
 
   add_index "accounts", ["assigned_to"], :name => "index_accounts_on_assigned_to"
