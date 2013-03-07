@@ -38,7 +38,13 @@ class RegisterSale
 
 	def comment
 		@comment ||= opportunity.comments.create(
+			:user => user,
 			:comment => "https://globalhandicrafts.vendhq.com/sale/#{params[:id]}"
 		)
+	end
+
+	def user
+		@user ||= User.find_by_email('marketplace@crossroads.org.hk') ||
+			User.create(:email => 'marketplace@crossroads.org.hk')
 	end
 end
