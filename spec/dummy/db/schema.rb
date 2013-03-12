@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121221033947) do
+ActiveRecord::Schema.define(:version => 20130312064954) do
 
   create_table "account_aliases", :force => true do |t|
     t.integer  "account_id"
@@ -53,7 +53,6 @@ ActiveRecord::Schema.define(:version => 20121221033947) do
     t.integer  "rating",                         :default => 0,        :null => false
     t.string   "category",         :limit => 32
     t.text     "subscribed_users"
-    t.string   "cf_vend_customer_id"
   end
 
   add_index "accounts", ["assigned_to"], :name => "index_accounts_on_assigned_to"
@@ -184,6 +183,7 @@ ActiveRecord::Schema.define(:version => 20121221033947) do
     t.string   "background_info"
     t.string   "skype",            :limit => 128
     t.text     "subscribed_users"
+    t.string   "cf_vend_customer_id"
   end
 
   add_index "contacts", ["assigned_to"], :name => "index_contacts_on_assigned_to"
