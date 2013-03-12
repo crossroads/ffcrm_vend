@@ -1,0 +1,22 @@
+.title
+  = t(:ffcrm_vend_settings, :default => "Vend Integration Settings")
+
+.list
+  .remote
+    .section
+
+      = form_tag 'ffcrm_vend', :method => :post do
+        .label.top.req
+          Vend ID:
+          = text_field_tag 'vend_id', @vend_id, :size => 30
+        %br
+        .label.top.req
+          Email address:
+          = text_field_tag 'email', @email, :size => 50
+        %br
+          This is the email of the user that will create the sale. It is recommended you
+          create a Fat Free CRM user purely for this purpose.
+
+        %br
+        %br
+        = submit_tag 'Update', :name => :update, :style => "width:60px"

@@ -58,11 +58,11 @@ class RegisterSale
     end
 
     def vend_id
-      'globalhandicrafts'
+      Setting.ffcrm_vend.present? ? Setting.ffcrm_vend[:vend_id] : 'unknown'
     end
 
     def email
-      'marketplace@crossroads.org.hk'
+      Setting.ffcrm_vend.present? ? Setting.ffcrm_vend[:email] : 'unknown'
     end
 
   end # class
