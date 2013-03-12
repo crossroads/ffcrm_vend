@@ -24,7 +24,7 @@ class Admin::FfcrmVendController < Admin::ApplicationController
     elsif !User.where(:email => @email.to_s).present?
       flash[:error] = "Email must represent a user in Fat Free CRM."
     else
-      Setting[:ffcrm_vend] = {:vend_id => @vend_id, :email => @email}
+      RegisterSale.settings = {:vend_id => @vend_id, :email => @email}
       flash[:info] = "Settings saved."
       redirect_to(:action => :index) and return
     end
