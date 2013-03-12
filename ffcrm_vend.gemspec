@@ -17,7 +17,8 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency "rails", "~> 3.2.12"
-  
+  s.add_dependency "fat_free_crm", ">= 0.12.0"
+
   s.add_development_dependency 'pg'
   s.add_development_dependency 'rspec-rails', '~> 2.0'
   s.add_development_dependency 'capybara', '~> 1.1.2'

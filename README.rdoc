@@ -1,3 +1,3 @@
 = FfcrmVend
 
-This project rocks and uses MIT-LICENSE.
+An endpoint that receives the vendhq.com webhook register_sale and adds the details to a Fat Free CRM database."
