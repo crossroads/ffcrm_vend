@@ -101,9 +101,6 @@ GEM
     cocaine (0.5.1)
       climate_control (>= 0.0.3, < 1.0)
     coderay (1.0.8)
-    combustion (0.3.3)
-      rails (>= 3.0.0)
-      thor (>= 0.14.6)
     css_parser (1.2.6)
       addressable
       rdoc
@@ -111,6 +108,11 @@ GEM
     dynamic_form (1.1.4)
     email_reply_parser_ffcrm (0.5.0)
     erubis (2.7.0)
+    factory_girl (4.2.0)
+      activesupport (>= 3.0.0)
+    factory_girl_rails (4.2.1)
+      factory_girl (~> 4.2.0)
+      railties (>= 3.0.0)
     ffaker (1.15.0)
     ffi (1.4.0)
     haml (3.1.8)
@@ -248,7 +250,7 @@ PLATFORMS
 
 DEPENDENCIES
   capybara (~> 1.1.2)
-  combustion (~> 0.3.1)
+  factory_girl_rails
   fat_free_crm!
   ffcrm_vend!
   jquery-rails
