@@ -1,78 +1,67 @@
 {
-	"id": "5e8b5134-a002-dd6b-b7c7-26126887c4ee",
-	"sale_date": "2012-11-13 16:40:06",
-	"status": "CLOSED",
-	"user_id": "9b2a8d5f-2d20-11e2-8057-080027706aa2",
-	"customer_id": "9b17ac9d-2d20-11e2-8057-080027706aa2",
-	"register_id": "9af85e69-2d20-11e2-8057-080027706aa2",
-	"market_id": "1",
-	"invoice_number": "144",
-	"short_code": "ne2zq",
-	"totals": {
-		"total_price": "4.87",
-		"total_tax": "0.69",
-		"total_payment": "5.55",
-		"total_to_pay": "0"
-	},
-	"note": null,
-	"updated_at": "2012-11-13 16:40:09",
-	"created_at": "2012-11-13 16:40:09",
-	"customer": {
-		"id": "9b17ac9d-2d20-11e2-8057-080027706aa2",
-		"customer_code": "WALKIN",
-		"balance": "-6.250",
-		"points": 0,
-		"note": null,
-		"year_to_date": "79945.92188",
-		"sex": "M",
-		"date_of_birth": "1950-05-25",
-		"updated_at": "2012-11-13 16:43:15",
-		"created_at": "2012-11-13 12:28:03"
-	},
-	"user": {
-		"id": "9b2a8d5f-2d20-11e2-8057-080027706aa2",
-		"name": "admin",
-		"display_name": "A admin this time",
-		"outlet_id": "9ae97219-2d20-11e2-8057-080027706aa2",
-		"target_daily": null,
-		"target_weekly": null,
-		"target_monthly": null,
-		"created_at": "2011-09-08 05:18:38",
-		"updated_at": "2011-09-08 05:18:38"
-	},
-	"register_sale_products": [
-	{
-		"id": "148793f0-475a-7d49-442d-fd761ce76339",
-		"product_id": "9fe945bc-2d20-11e2-8057-080027706aa2",
-		"quantity": 1,
-		"price": "1.90",
-		"price_set": true,
-		"tax": "0.24",
-		"price_total": "1.9",
-		"tax_total": "0.24",
-		"tax_id": "9a025ff0-2d20-11e2-8057-080027706aa2",
-		"tax_name": "NZ GST",
-		"tax_rate": "0.150000"
-	},
-	{
-		"id": "7d37dc0f-9462-06fa-cae0-0b4988b36539",
-		"product_id": "a0c0df02-2d20-11e2-8057-080027706aa2",
-		"quantity": 3,
-		"price": "0.99",
-		"price_set": true,
-		"tax": "0.15",
-		"price_total": "2.97",
-		"tax_total": "0.45",
-		"tax_id": "9a025ff0-2d20-11e2-8057-080027706aa2",
-		"tax_name": "NZ GST",
-		"tax_rate": "0.150000"
-	}],
-	"register_sale_payments": [
-	{
-		"id": "39948e3e-bf93-1b60-ff44-f46a777ed1d4",
-		"payment_date": "2012-11-13 16:40:06",
-		"amount": "5.55",
-		"retailer_payment_type_id": "9e9ba1ba-2d20-11e2-8057-080027706aa2",
-		"payment_type_id": "1"
-	}]
+   "created_at":"2013-03-13 10:12:17",
+   "customer":{
+      "balance":"0.000",
+      "contact_first_name":"Bob",
+      "contact_last_name":"Waikakte",
+      "created_at":"2013-03-13 09:51:55",
+      "custom_field_1":"",
+      "custom_field_2":"",
+      "custom_field_3":"",
+      "custom_field_4":"",
+      "customer_code":"Bob-4QTY",
+      "id":"a3ccb1a1-8bc3-11e2-b1f5-4040782fde00",
+      "note":"",
+      "points":"0",
+      "sex":"M",
+      "updated_at":"2013-03-13 10:11:53",
+      "year_to_date":"18.90000"
+   },
+   "customer_id":"a3ccb1a1-8bc3-11e2-b1f5-4040782fde00",
+   "id":"d66f205d-147e-bec6-29fd-72ec60104b0c",
+   "invoice_number":"6",
+   "market_id":"3",
+   "register_id":"a5834e96-8b10-11e2-b1f5-4040782fde00",
+   "register_sale_payments":[
+      {
+         "amount":"4.95",
+         "id":"bda69263-a166-20a6-bfc5-234f8596eb8d",
+         "payment_date":"2013-03-13T10:12:14Z",
+         "payment_type_id":"1",
+         "retailer_payment_type_id":"a58d10ac-8b10-11e2-b1f5-4040782fde00"
+      }
+   ],
+   "register_sale_products":[
+      {
+         "id":"f10c6d69-d2b6-d954-ea0c-f065b28bd303",
+         "price":"4.95000",
+         "price_set":"0",
+         "price_total":"4.95",
+         "product_id":"a5550505-8b10-11e2-b1f5-4040782fde00",
+         "quantity":"1",
+         "tax":"0.00000",
+         "tax_id":"2b12e79e-714e-11df-b0bf-4040f540b50a",
+         "tax_name":"No Tax",
+         "tax_rate":"0.000000",
+         "tax_total":"0"
+      }
+   ],
+   "sale_date":"2013-03-13T10:12:15Z",
+   "short_code":"zmi1y8",
+   "status":"CLOSED",
+   "totals":{
+      "total_payment":"4.95",
+      "total_price":"4.95",
+      "total_tax":"0",
+      "total_to_pay":"0"
+   },
+   "updated_at":"2013-03-13 10:12:17",
+   "user":{
+      "created_at":"2013-03-12 12:30:38",
+      "display_name":"A cashier",
+      "id":"a5952c31-8b10-11e2-b1f5-4040782fde00",
+      "name":"itdept@crossroads.org.hk",
+      "updated_at":"2013-03-12 12:30:38"
+   },
+   "user_id":"a5952c31-8b10-11e2-b1f5-4040782fde00"
 }

@@ -2,8 +2,7 @@ class RegisterSale
   attr_accessor :params
 
   def initialize(params)
-    Rails.log.warn("RegisterSale:initialize got: #{params}")
-    @params = params['payload']
+    @params = JSON.parse(params['payload'])
   end
 
   def create
