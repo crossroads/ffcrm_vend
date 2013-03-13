@@ -2,7 +2,8 @@ class RegisterSale
   attr_accessor :params
 
   def initialize(params)
-    @params = params[:payload]
+    Rails.log.warn("RegisterSale:initialize got: #{params}")
+    @params = params['payload']
   end
 
   def create
@@ -14,18 +15,18 @@ class RegisterSale
 
   def contact
     @contact ||=
-      Contact.where(:cf_vend_customer_id => params[:customer_id].to_s).first ||
+      Contact.where(:cf_vend_customer_id => params['customer_id']).first ||
       Contact.create(
         :first_name => "Contact for Register Sale",
-        :last_name => "Inv #{params[:invoice_number]}",
-        :cf_vend_customer_id => params[:customer_id]
+        :last_name => "Inv #{params['invoice_number']}",
+        :cf_vend_customer_id => params['customer_id']
       )
   end
 
   def opportunity
     @opportunity ||= Opportunity.create(
-      :name => "Register Sale #{params[:invoice_number]}",
-      :amount => params[:totals][:total_payment],
+      :name => "Register Sale #{params['invoice_number']}",
+      :amount => params['totals']['total_payment'],
       :stage => "won"
     )
   end
@@ -39,7 +40,7 @@ class RegisterSale
 
   def comment
     url = RegisterSale.vend_url
-    url.path = "/sale/#{params[:id]}"
+    url.path = "/sale/#{params['id']}"
 
     @comment ||= opportunity.comments.create(
       :user => user,
