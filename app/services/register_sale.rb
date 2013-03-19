@@ -16,8 +16,8 @@ class RegisterSale
     @contact ||=
       Contact.where(:cf_vend_customer_id => params['customer_id']).first ||
       Contact.create(
-        :first_name => "Contact for Register Sale",
-        :last_name => "Inv #{params['invoice_number']}",
+        :first_name => params['customer']['contact_first_name'],
+        :last_name => params['customer']['contact_last_name'],
         :cf_vend_customer_id => params['customer_id']
       )
   end
@@ -48,7 +48,9 @@ class RegisterSale
   end
 
   def user
-    @user ||= User.where(:email => RegisterSale.email).first || User.create(:email => RegisterSale.email)
+    @user ||=
+      User.where(:email => RegisterSale.email).first ||
+      User.create(:email => RegisterSale.email)
   end
 
   class << self
