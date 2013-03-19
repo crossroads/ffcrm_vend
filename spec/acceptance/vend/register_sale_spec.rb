@@ -18,6 +18,7 @@ feature 'Register Sale' do
 
     opportunity = Opportunity.last
     opportunity.name.should eql("Register Sale #{register_sale["invoice_number"]}")
+    opportunity.closes_on.should eql(Date.parse(register_sale['sale_date']))
 
     comment = opportunity.comments.first
     comment.comment.should include("/sale/#{register_sale['id']}")

@@ -26,6 +26,7 @@ class RegisterSale
     @opportunity ||= Opportunity.create(
       :name => "Register Sale #{params['invoice_number']}",
       :amount => params['totals']['total_payment'],
+      :closes_on => params['sale_date'],
       :stage => "won"
     )
   end
