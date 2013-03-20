@@ -6,6 +6,7 @@ class Customer
   end
 
   def create
+    PaperTrail.whodunnit = user.id
     contact
     contact_update
   end
@@ -27,4 +28,11 @@ class Customer
     end
     contact.save
   end
+
+  def user
+    @user ||=
+      User.where(:email => FfcrmVend.email).first ||
+      User.create(:email => FfcrmVend.email)
+  end
+
 end

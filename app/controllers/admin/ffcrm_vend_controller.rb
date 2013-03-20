@@ -6,8 +6,8 @@ class Admin::FfcrmVendController < Admin::ApplicationController
   # GET /admin/ffcrm_vend
   #----------------------------------------------------------------------------
   def index
-    @vend_id = RegisterSale.vend_id
-    @email = RegisterSale.email
+    @vend_id = FfcrmVend.vend_id
+    @email = FfcrmVend.email
     respond_to do |format|
       format.html # index.html.haml
     end
@@ -24,7 +24,7 @@ class Admin::FfcrmVendController < Admin::ApplicationController
     elsif !User.where(:email => @email.to_s).present?
       flash[:error] = "Email must represent a user in Fat Free CRM."
     else
-      RegisterSale.settings = {:vend_id => @vend_id, :email => @email}
+      FfcrmVend.settings = {:vend_id => @vend_id, :email => @email}
       flash[:info] = "Settings saved."
       redirect_to(:action => :index) and return
     end

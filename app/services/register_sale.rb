@@ -6,6 +6,7 @@ class RegisterSale
   end
 
   def create
+    PaperTrail.whodunnit = user.id
     contact
     opportunity
     contact_opportunity
@@ -39,7 +40,7 @@ class RegisterSale
   end
 
   def comment
-    url = RegisterSale.vend_url
+    url = FfcrmVend.vend_url
     url.path = "/sale/#{params['id']}"
 
     @comment ||= opportunity.comments.create(
@@ -50,28 +51,8 @@ class RegisterSale
 
   def user
     @user ||=
-      User.where(:email => RegisterSale.email).first ||
-      User.create(:email => RegisterSale.email)
+      User.where(:email => params['user']['name']).first ||
+      User.create(:email => params['user']['name'])
   end
-
-  class << self
-
-    def vend_url
-      URI("https://#{vend_id}.vendhq.com/")
-    end
-
-    def settings=(options)
-      Setting[:ffcrm_vend] = {:vend_id => options[:vend_id], :email => options[:email]}
-    end
-
-    def vend_id
-      Setting.ffcrm_vend.present? ? Setting.ffcrm_vend[:vend_id] : 'unknown'
-    end
-
-    def email
-      Setting.ffcrm_vend.present? ? Setting.ffcrm_vend[:email] : 'unknown'
-    end
-
-  end # class
 
 end
