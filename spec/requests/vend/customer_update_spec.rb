@@ -15,6 +15,16 @@ feature 'Customer Update' do
     contact.first_name.should eql(customer['contact']['first_name'])
     contact.last_name.should eql(customer['contact']['last_name'])
     contact.phone.should eql(customer['contact']['phone'])
+
+    address = contact.business_address
+    address.street1.should eql(customer['contact']['physical_address1'])
+    address.street2.should eql(customer['contact']['physical_address2'])
+    suburb_city = "#{customer['contact']['physical_suburb']}, #{customer['contact']['physical_city']}"
+    address.city.should eql(suburb_city)
+    address.state.should eql(customer['contact']['physical_state'])
+    address.zipcode.should eql(customer['contact']['physical_postcode'])
+    address.country.should eql(customer['contact']['physical_country_id'])
+
   end
 
 end

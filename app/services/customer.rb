@@ -26,6 +26,27 @@ class Customer
       contact.last_name = contact_params['last_name'] unless contact_params['last_name'].blank?
       contact.phone = contact_params['phone'] unless contact_params['phone'].blank?
     end
+
+    # Set address if none exists
+    if contact.business_address.blank?
+      street1 = params['contact']['physical_address1']
+      street2 = params['contact']['physical_address2']
+      suburb = params['contact']['physical_suburb']
+      city = params['contact']['physical_city']
+      city = "#{suburb}, #{city}" if suburb
+      state = params['contact']['physical_state']
+      zipcode = params['contact']['physical_postcode']
+      country = params['contact']['physical_country_id']
+
+      if Setting.compound_address
+        address = Address.new(:street1 => street1, :street2 => street2, :city => city,
+          :state => state, :zipcode => zipcode, :country => country, :address_type => "Business")
+      else
+        address = Address.new(:full_address => "#{street1}\n#{street2}\n#{city}\n#{state}\n#{zipcode}\n#{country}")
+      end
+
+      contact.business_address = address unless address.blank?
+    end
     contact.save
   end
 
