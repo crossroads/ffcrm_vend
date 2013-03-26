@@ -20,8 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency "fat_free_crm"
 
   s.add_development_dependency 'pg'
-  s.add_development_dependency 'rspec-rails', '~> 2.0'
-  s.add_development_dependency 'capybara', '~> 1.1.2'
+  s.add_development_dependency 'rspec-rails'
   s.add_development_dependency 'factory_girl_rails'
   s.add_development_dependency 'steak'
   s.add_development_dependency 'pry'
