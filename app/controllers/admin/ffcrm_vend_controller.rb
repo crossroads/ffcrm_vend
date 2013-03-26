@@ -7,7 +7,8 @@ class Admin::FfcrmVendController < Admin::ApplicationController
   #----------------------------------------------------------------------------
   def index
     @vend_id = FfcrmVend.vend_id
-    @email = FfcrmVend.email
+    @user_id = FfcrmVend.user_id
+    @sale_prefix = FfcrmVend.sale_prefix
     respond_to do |format|
       format.html # index.html.haml
     end
@@ -15,16 +16,15 @@ class Admin::FfcrmVendController < Admin::ApplicationController
 
   def update
     @vend_id = params[:vend_id]
-    @email = params[:email]
+    @user_id = params[:user_id]
+    @sale_prefix = (params[:sale_prefix] || "").strip
 
     if !@vend_id.present?
       flash[:error] = "Vend ID is reqired."
-    elsif !@email.present?
-      flash[:error] = "Email is reqired."
-    elsif !User.where(:email => @email.to_s).present?
-      flash[:error] = "Email must represent a user in Fat Free CRM."
+    elsif !@user_id.present?
+      flash[:error] = "A default user is reqired."
     else
-      FfcrmVend.settings = {:vend_id => @vend_id, :email => @email}
+      FfcrmVend.settings = {:vend_id => @vend_id, :user_id => @user_id, :sale_prefix => @sale_prefix}
       flash[:info] = "Settings saved."
       redirect_to(:action => :index) and return
     end

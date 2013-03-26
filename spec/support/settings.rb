@@ -1,3 +1,12 @@
-# Ensure we have some settings in a namespace we can use in our tests
+#
+# Ensure we have some settings for our tests
+#
 
-Setting[:ffcrm_vend] = {:vend_id => 'test_vend_id', :email => 'vend@example.com'}
+Rspec.configure do |config|
+
+  config.before(:each) do
+    user = FactoryGirl.create(:user)
+    Setting[:ffcrm_vend] = {:vend_id => 'testvendid', :user_id => user.id, :sale_prefix => 'Test Sale'}
+  end
+
+end

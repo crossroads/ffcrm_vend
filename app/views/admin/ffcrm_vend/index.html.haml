@@ -10,12 +10,24 @@
           Vend ID:
           = text_field_tag 'vend_id', @vend_id, :size => 30
         %br
+
         .label.top.req
-          Email address:
-          = text_field_tag 'email', @email, :size => 50
+          Default user:
+          - user_options = options_from_collection_for_select(all_users, 'id', 'full_name', @user_id)
+          = select_tag('user_id', options_for_select(user_options), :class => 'chzn-select', :style => "width:160px")
         %br
-          This is the email of the user that will create the sale. It is recommended you
-          create a Fat Free CRM user purely for this purpose.
+          This is the default user for actions that occur via webhooks.
+          Not all webhooks provide 'user' information, in those cases, this user will own the operation.
+          It is recommended you create a Fat Free CRM user purely for this purpose.
+
+        %br
+        .label.top.req
+          Sale prefix:
+          = text_field_tag 'sale_prefix', @sale_prefix, :size => 50
+        %br
+          This prefix forms part of the opportunity name when a sale is created.
+          Example: if the prefix is "My Sale" then sales opportunities named "My Sale 15"
+          will be created (where 15 is the Vend sales number). If blank, the default is "Vend Sale"
 
         %br
         %br

@@ -6,7 +6,7 @@ class RegisterSale
   end
 
   def create
-    PaperTrail.whodunnit = user.id
+    PaperTrail.whodunnit = user.try(:id)
     contact
     opportunity
     contact_opportunity
@@ -25,9 +25,10 @@ class RegisterSale
 
   def opportunity
     @opportunity ||= Opportunity.create(
-      :name => "Register Sale #{params['invoice_number']}",
+      :name => "#{FfcrmVend.sale_prefix} #{params['invoice_number']}",
       :amount => params['totals']['total_payment'],
       :closes_on => params['sale_date'],
+      :probability => 100,
       :stage => "won"
     )
   end
@@ -49,10 +50,12 @@ class RegisterSale
     )
   end
 
+  # Try to pick the user that called the update
+  # If not found, use the default user
   def user
     @user ||=
       User.where(:email => params['user']['name']).first ||
-      User.create(:email => params['user']['name'])
+      FfcrmVend.default_user
   end
 
 end

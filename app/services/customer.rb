@@ -6,7 +6,7 @@ class Customer
   end
 
   def create
-    PaperTrail.whodunnit = user.id
+    PaperTrail.whodunnit = user.try(:id)
     contact
     contact_update
   end
@@ -29,10 +29,11 @@ class Customer
     contact.save
   end
 
+  #
+  # Customer update webhook doesn't include params['user'] so we use the Vend default instead
+  #
   def user
-    @user ||=
-      User.where(:email => FfcrmVend.email).first ||
-      User.create(:email => FfcrmVend.email)
+    @user ||= FfcrmVend.default_user
   end
 
 end

@@ -17,11 +17,14 @@ feature 'Register Sale' do
     }.should_not change(Contact, :count).by(1)
 
     opportunity = Opportunity.last
-    opportunity.name.should eql("Register Sale #{register_sale["invoice_number"]}")
+    opportunity.name.should eql("#{FfcrmVend.sale_prefix} #{register_sale["invoice_number"]}")
     opportunity.closes_on.should eql(Date.parse(register_sale['sale_date']))
+    opportunity.probability.should eql(100)
 
     comment = opportunity.comments.first
     comment.comment.should include("/sale/#{register_sale['id']}")
+    user = FfcrmVend.default_user
+    comment.user.should eql(user)
 
     response.should be_success
   end
