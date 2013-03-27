@@ -111,6 +111,16 @@ Install the nestfull gem (```gem install nestful```), run your rails server and 
 
 Please open issues in the GitHub issue tracker and use pull requests for new features.
 
+## License
+
+Copyright Crossroads Foundation 2013
+
+This is "Charityware" i.e.you can use and copy it as much as you like,
+but you are encouraged to make a donation for those in need via the
+Crossroads Foundation (the organisation who built this plugin). See http://www.crossroads.org.hk/
+
+Full license pending
+
 ## Authors
 
 * Ben Tillman (ben.tillman@gmail.com)
