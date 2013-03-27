@@ -7,9 +7,9 @@ require "ffcrm_vend/version"
 Gem::Specification.new do |s|
   s.name        = "ffcrm_vend"
   s.version     = FfcrmVend::VERSION
-  s.authors     = ["Ben Tillman"]
-  s.email       = ["ben.tillman@gmail.com"]
-  s.homepage    = "http://fatfreecrm.com"
+  s.authors     = ["Ben Tillman", "Steve Kenworthy"]
+  s.email       = ["ben.tillman@gmail.com", "steveyken@gmail.com"]
+  s.homepage    = "http://www.fatfreecrm.com"
   s.summary     = "Integration to vendhq.com"
   s.description = "Integration to vendhq.com provides webhook for register_sale"
 
@@ -25,4 +25,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'steak'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'debugger'
+  s.add_dependency 'ffaker'
 end

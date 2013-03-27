@@ -7,10 +7,12 @@ class RegisterSale
 
   def create
     PaperTrail.whodunnit = user.try(:id)
-    contact
-    opportunity
-    contact_opportunity
-    comment
+    ActiveRecord::Base.transaction do
+      contact
+      opportunity
+      contact_opportunity
+      comment
+    end
   end
 
   def contact
@@ -51,11 +53,11 @@ class RegisterSale
   end
 
   # Try to pick the user that called the update
-  # If not found, use the default user
+  # If not found or user name is blank, use the default user
   def user
-    @user ||=
-      User.where(:email => params['user']['name']).first ||
-      FfcrmVend.default_user
+    return @user unless @user.nil?
+    @user = User.where(:email => params['user']['name']).first if params['user']['name'].present?
+    @user ||= FfcrmVend.default_user
   end
 
 end

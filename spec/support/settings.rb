@@ -2,7 +2,7 @@
 # Ensure we have some settings for our tests
 #
 
-Rspec.configure do |config|
+RSpec.configure do |config|
 
   config.before(:each) do
     user = FactoryGirl.create(:user)

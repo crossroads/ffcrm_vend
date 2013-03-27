@@ -7,21 +7,34 @@ class Customer
 
   def create
     PaperTrail.whodunnit = user.try(:id)
-    contact
-    contact_update
+    ActiveRecord::Base.transaction do
+      contact
+      contact_update
+    end
   end
 
+  #
+  # Find a contact by looking up the customer id and/or email address.
+  # Return a new contact if nothing is found.
+  # Ensure blank customer_id / emails do not result in searches
+  #
   def contact
-    @contact ||=
-      Contact.where(:cf_vend_customer_id => params['id']).first ||
-      Contact.where(:email => params['contact']['email']).first ||
-      Contact.new
+    return @contact unless @contact.blank?
+
+    id = params['id']
+    @contact = Contact.where(:cf_vend_customer_id => id).first if id.present?
+    return @contact unless @contact.nil?
+
+    email = params['contact']['email']
+    @contact = (Contact.where(:email => email).first || Contact.where(:alt_email => email).first) if email.present?
+
+    @contact ||= Contact.new
   end
 
   def contact_update
     contact.cf_vend_customer_id = params['id']
     if contact_params = params['contact']
-      contact.email = contact_params['email'] unless contact_params['email'].blank?
+      update_email(contact, params['contact']['email'])
       contact.first_name = contact_params['first_name'] unless contact_params['first_name'].blank?
       contact.last_name = contact_params['last_name'] unless contact_params['last_name'].blank?
       contact.phone = contact_params['phone'] unless contact_params['phone'].blank?
@@ -55,6 +68,24 @@ class Customer
   #
   def user
     @user ||= FfcrmVend.default_user
+  end
+
+  private
+
+  #
+  # If a new email address comes in, check whether it's already on the contacts record (search email and alt_email).
+  # If it exists, then leave it alone.
+  # If it doesn't exist then add it to alt_email (if email is already filled) or to contact.email if it's blank.
+  #
+  def update_email(contact, email_address)
+    return unless email_address.present?
+    unless [contact.email, contact.alt_email].compact.include?(email_address)
+      if contact.email.blank?
+        contact.email = email_address
+      else
+        contact.alt_email = email_address
+      end
+    end
   end
 
 end
