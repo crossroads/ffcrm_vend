@@ -56,6 +56,8 @@ class RegisterSale
   # If not found or user name is blank, use the default user
   def user
     return @user unless @user.nil?
+    @user = User.where(:username => params['user']['name']).first if params['user']['name'].present?
+    return @user unless @user.nil?
     @user = User.where(:email => params['user']['name']).first if params['user']['name'].present?
     @user ||= FfcrmVend.default_user
   end

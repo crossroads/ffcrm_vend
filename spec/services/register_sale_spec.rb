@@ -56,9 +56,16 @@ describe 'Register Sale' do
 
     describe "user" do
 
-      it 'should find an existing user' do
+      it 'should find an existing user by email' do
         user = FactoryGirl.create(:user)
         payload = {'user' => {'name' => user.email} }
+        sale = RegisterSale.new('payload' => payload.to_json)
+        sale.user.should == user
+      end
+
+      it 'should find an existing user by username' do
+        user = FactoryGirl.create(:user)
+        payload = {'user' => {'name' => user.username} }
         sale = RegisterSale.new('payload' => payload.to_json)
         sale.user.should == user
       end

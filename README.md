@@ -41,7 +41,7 @@ The ```/vend/register_sale``` route responds to the ```sale.update``` payloads f
 When a sale webhook comes in, FfcrmVend does the following:
 
 * Determines the user that carried out the action and sets the ```PaperTrail.whodunnit``` field
- * The email address of the Vend user (cashier) who made the sale is usually included in the payload. If there is a corresponding user with the same email address in Fat Free CRM, then they are selected. Otherwise, the default user (set in the Admin -> Vend tab) is used.
+ * The username of the Vend cashier who made the sale is usually included in the payload. If there is a corresponding user with the same email address or username in Fat Free CRM, then they are selected. Otherwise, the default user (set in the Admin -> Vend tab) is used.
 * Looks for the customer in Fat Free CRM.
  * FfcrmVend adds a Contact custom field called ```cf_vend_customer_id```. If a customer is found with this id, then the sale is associated with this user. If no customer is found, a new contact is created.
 * Creates a new ```won``` opportunity and associates this with the customer.
@@ -57,10 +57,8 @@ Note: that the above actions take place inside a transaction. This means that in
 
 The ```/vend/customer_update``` route responds to Vend's ```customer.update``` webhook. When fired, the following happens:
 
-* Determines the user that carried out the action and sets the ```PaperTrail.whodunnit``` field.
- * Fat Free CRM recognises this as the user who is making the changes.
- * The email address of the Vend user (cashier) who made the change is usually included in the payload. If there is a corresponding user with the same email address in Fat Free CRM, then they are selected.
- * If no user is found, the default user (set in the Admin -> Vend tab) is used.
+* Sets the ```PaperTrail.whodunnit``` field to the default user (set in the Admin -> Vend tab).
+ * The ```customer_update``` hook from Vend does not include the user who made the update so we always the default user.
 * Looks for the customer in Fat Free CRM.
  * FfcrmVend adds a contact custom field called ```cf_vend_customer_id```. If a contact is found with this id, then the contact update affects this record.
  * If no existing contact is found, the email address is used to search in the ```email``` and ```alt_email``` fields. The first contact to match is used.
