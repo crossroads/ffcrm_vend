@@ -10,6 +10,7 @@ module FfcrmVend
                               :user_id => options[:user_id],
                               :sale_prefix => options[:sale_prefix],
                               :token => options[:token],
+                              :exclude_customers => options[:exclude_customers],
                              }
     end
 
@@ -44,6 +45,10 @@ module FfcrmVend
     # The token is used to authenticate incoming feeds.
     def token
       Setting.ffcrm_vend.present? ? Setting.ffcrm_vend[:token] : nil
+    end
+
+    def exclude_customers
+      Setting.ffcrm_vend.present? ? Setting.ffcrm_vend[:exclude_customers].split("\n").compact.uniq : []
     end
 
     def default_user

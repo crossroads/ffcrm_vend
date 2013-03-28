@@ -25,6 +25,10 @@ describe 'Register Sale' do
         contact.cf_vend_customer_id.should eql(vend_customer_id)
       end
 
+      it "should exclude a sale if the customer is on the block list" do
+
+      end
+
     end
 
     describe "opportunity" do

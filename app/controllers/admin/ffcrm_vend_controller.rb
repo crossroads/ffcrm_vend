@@ -10,6 +10,7 @@ class Admin::FfcrmVendController < Admin::ApplicationController
     @user_id = FfcrmVend.user_id
     @sale_prefix = FfcrmVend.sale_prefix
     @token = FfcrmVend.token || SecureRandom.urlsafe_base64
+    @exclude_customers = FfcrmVend.exclude_customers.join("\n")
     respond_to do |format|
       format.html # index.html.haml
     end
@@ -20,13 +21,15 @@ class Admin::FfcrmVendController < Admin::ApplicationController
     @user_id = params[:user_id]
     @sale_prefix = (params[:sale_prefix] || "").strip
     @token = params[:token]
+    @exclude_customers = params[:exclude_customers]
 
     if !@vend_id.present?
       flash[:error] = "Vend ID is reqired."
     elsif !@user_id.present?
       flash[:error] = "A default user is reqired."
     else
-      FfcrmVend.settings = {:vend_id => @vend_id, :user_id => @user_id, :sale_prefix => @sale_prefix, :token => @token}
+      FfcrmVend.settings = {:vend_id => @vend_id, :user_id => @user_id, :sale_prefix => @sale_prefix,
+        :token => @token, :exclude_customers => @exclude_customers}
       flash[:info] = "Settings saved."
       redirect_to(:action => :index) and return
     end

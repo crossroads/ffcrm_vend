@@ -48,5 +48,15 @@
         will be created (where 15 is the Vend sales number). If blank, the default is "Vend Sale"
 
       %br
+      .label.top.req
+        Customer exclusion list:
+      %br
+        Any customer names listed here will not create sales in the CRM. This is useful if you have generic
+        customers that you don't want sales to be marked against. Use the full name of the customer.
+        Each name must go on a separate line.
+      %br
+        = text_area_tag 'exclude_customers', @exclude_customers, :size => "25x10"
+
+      %br
       %br
       = submit_tag 'Update', :name => :update, :style => "width:60px"
