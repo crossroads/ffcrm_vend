@@ -4,7 +4,7 @@
 .remote
   .section
 
-    = form_tag 'ffcrm_vend', :method => :post do
+    = form_tag 'ffcrm_vend', :method => :put do
       .label.top.req
         Vend ID:
         = text_field_tag 'vend_id', @vend_id, :size => 30
