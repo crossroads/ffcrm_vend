@@ -3,6 +3,7 @@ require 'cgi'
 class VendController < ActionController::Base
 
   respond_to :json
+  before_filter :authenticate
 
   def customer_update
     Customer.new(params).create
@@ -28,6 +29,15 @@ class VendController < ActionController::Base
     data = { 'payload' => body['payload'][0] }
     RegisterSale.new(data).create
     respond_with({}, :location => nil)
+  end
+
+  private
+
+  # Note: this allows a blank token to effectively turn off authentication
+  def authenticate
+    unless FfcrmVend.token == params[:token]
+      render :text => "", :status => :unauthorized
+    end
   end
 
 end

@@ -10,10 +10,11 @@ Add ```ffcrm_vend``` to your Fat Free CRM application Gemfile and run bundle ins
 
 ## Setup
 
-Once installated, you should start your Fat Free CRM server and go to the Admin section. There you can click on the "Vend" tab
-and set various options.
+Once installated, you should start your Fat Free CRM server and go to the Admin section.
+There you can click on the "Vend" tab and set various options.
 
 * Vend ID - this is the id of your vend instance. Used to provide links back to the sales in Vend.
+* Token - this is the token that is shared between your app and the webhook provider to authenicate requests. A token is generated for you by default.
 * Default User - select a user that will be the owner of requests that come in from the Vend webhook. Not all webhooks include data about who performed the action. In these cases, this user is used.
 * Sale prefix - text to use for the name of the opportunity that will be created whenever a sale is made. (more details below)
 
@@ -21,10 +22,12 @@ and set various options.
 
 * Login to your Vend instance and goto /setup/api (https://your-vend-id.vendhq.com/setup/api)
 * Click "Add webhook"
-* Enter https://your-fat-free-crm-instance.com/vend/register_sale as the URL
+* Enter the register_sale url
+ * E.g. https://your-fat-free-crm-instance.com/vend/register_sale?token=b6ONSq5FnxdbIwRF3lKnlQ
+ * You can find this url listed on the admin vend screen (see Setup above)
 * Select ```sale.update``` as the webhook type and save.
 * Click on "Add webhook" again
-* Enter https://your-fat-free-crm-instance.com/vend/customer_update as the URL
+* Enter https://your-fat-free-crm-instance.com/vend/customer_update?token=b6ONSq5FnxdbIwRF3lKnlQ as the URL
 * Select ```customer.update``` as the webhook type and save.
 
 ## Endpoints
@@ -95,16 +98,18 @@ Install the nestfull gem (```gem install nestful```), run your rails server and 
 
   ```
   require 'nestful'
+  token = "your-token"
   payload = File.open('/path/to/ffcrm_vend/spec/requests/fixtures/register_sale.json').read.gsub('\n', '')
-  Nestful.post 'http://localhost:3000/vend/register_sale', :format => :json, :params => {:payload => payload}
+  Nestful.post 'http://localhost:3000/vend/register_sale', :format => :json, :params => {:payload => payload, :token => token}
   ```
 
 * To fire a ```customer_update``` webhook use:
 
   ```
   require 'nestful'
+  token = "your-token"
   payload = File.open('/path/to/ffcrm_vend/spec/requests/fixtures/customer_update.json').read.gsub('\n', '')
-  Nestful.post 'http://localhost:3000/vend/customer_update', :format => :json, :params => {:payload => payload}
+  Nestful.post 'http://localhost:3000/vend/customer_update', :format => :json, :params => {:payload => payload, :token => token}
   ```
 
 ## Bug Fixes / Contributions

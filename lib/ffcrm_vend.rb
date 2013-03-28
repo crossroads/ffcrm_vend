@@ -9,6 +9,7 @@ module FfcrmVend
       Setting[:ffcrm_vend] = {:vend_id => options[:vend_id],
                               :user_id => options[:user_id],
                               :sale_prefix => options[:sale_prefix],
+                              :token => options[:token],
                              }
     end
 
@@ -38,6 +39,11 @@ module FfcrmVend
     # We use email below to choose a fallback.
     def user_id
       Setting.ffcrm_vend.present? ? Setting.ffcrm_vend[:user_id] : ''
+    end
+
+    # The token is used to authenticate incoming feeds.
+    def token
+      Setting.ffcrm_vend.present? ? Setting.ffcrm_vend[:token] : nil
     end
 
     def default_user

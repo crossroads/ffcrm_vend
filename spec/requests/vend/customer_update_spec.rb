@@ -27,4 +27,10 @@ feature 'Customer Update' do
 
   end
 
+  scenario 'rejected token' do
+    Setting.ffcrm_vend = Setting.ffcrm_vend.merge(:token => SecureRandom.urlsafe_base64)
+    post('vend/customer_update', :payload => customer_json, :token => 'XYZ')
+    response.response_code.should eql(401)
+  end
+
 end

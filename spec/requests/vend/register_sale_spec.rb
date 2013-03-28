@@ -29,4 +29,10 @@ feature 'Register Sale' do
     response.should be_success
   end
 
+  scenario 'rejected token' do
+    Setting.ffcrm_vend = Setting.ffcrm_vend.merge(:token => SecureRandom.urlsafe_base64)
+    post('vend/register_sale', :payload => register_sale_json, :token => 'XYZ')
+    response.response_code.should eql(401)
+  end
+
 end
