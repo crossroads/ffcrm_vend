@@ -23,10 +23,10 @@
       %ul
         %li{:style => 'list-style-type: disc; list-style-position: inside;'}
           Register Sale:
-          =link_to vend_register_sale_url(:token => @token)
+          =link_to vend_register_sale_url(:token => @token), vend_register_sale_url(:token => @token)
         %li{:style => 'list-style-type: disc; list-style-position: inside;'}
           Customer Update:
-          =link_to vend_customer_update_url(:token => @token)
+          =link_to vend_customer_update_url(:token => @token), vend_customer_update_url(:token => @token)
 
       %br
       .label.top.req
