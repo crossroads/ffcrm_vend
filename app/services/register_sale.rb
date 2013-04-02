@@ -3,30 +3,50 @@ class RegisterSale
 
   def initialize(params)
     @params = JSON.parse(params['payload'])
+    PaperTrail.whodunnit = user.try(:id)
   end
 
   def create
-    PaperTrail.whodunnit = user.try(:id)
-    ActiveRecord::Base.transaction do
-      contact
-      opportunity
-      contact_opportunity
-      comment
+    if contact.present?
+      ActiveRecord::Base.transaction do
+        opportunity
+        contact_opportunity
+        comment
+      end
     end
   end
 
+  private
+
+  #
+  # Find a contact by looking for customer id.
+  # Ensure excluded customers are not returned.
+  # Ensure blank customer_id does not return results.
+  # Otherwise, try to create a new contact object
+  # If no customer name supplied then return nil
+  #
   def contact
-    @contact ||=
-      Contact.where(:cf_vend_customer_id => params['customer_id']).first ||
-      Contact.create(
-        :first_name => params['customer']['contact_first_name'],
-        :last_name => params['customer']['contact_last_name'],
-        :cf_vend_customer_id => params['customer_id']
-      )
+    return @contact if @contact.present?
+
+    # Is contact in exclusion list?
+    if (customer = params['customer']).present?
+      first_name = customer['contact_first_name']
+      last_name = customer['contact_last_name']
+      return nil if FfcrmVend.is_customer_in_exclusion_list?(first_name, last_name)
+    end
+
+    @contact = Contact.where(:cf_vend_customer_id => params['customer_id']).first
+    return @contact if @contact.present?
+
+    if customer and first_name and last_name
+      @contact = Contact.create( :first_name => first_name, :last_name => last_name, :cf_vend_customer_id => params['customer_id'] )
+    else
+      nil
+    end
   end
 
   def opportunity
-    @opportunity ||= Opportunity.create(
+    @opportunity ||= Opportunity.create!(
       :name => "#{FfcrmVend.sale_prefix} #{params['invoice_number']}",
       :amount => params['totals']['total_payment'],
       :closes_on => params['sale_date'],
@@ -56,9 +76,10 @@ class RegisterSale
   # If not found or user name is blank, use the default user
   def user
     return @user unless @user.nil?
-    @user = User.where(:username => params['user']['name']).first if params['user']['name'].present?
-    return @user unless @user.nil?
-    @user = User.where(:email => params['user']['name']).first if params['user']['name'].present?
+    if (user_params = params['user']).present?
+      name = user_params['name']
+      @user = (User.where(:username => name).first || User.where(:email => name).first) if name.present?
+    end
     @user ||= FfcrmVend.default_user
   end
 

@@ -11,7 +11,8 @@ describe 'Register Sale' do
         contact = FactoryGirl.create(:contact, :cf_vend_customer_id => vend_customer_id)
         payload = {'customer_id' => vend_customer_id}
 
-        RegisterSale.new('payload' => payload.to_json).contact.should eql(contact)
+        sale = RegisterSale.new('payload' => payload.to_json)
+        sale.send(:contact).should eql(contact)
       end
 
       it "should create a new contact with first_name, last_name and customer_id" do
@@ -19,14 +20,32 @@ describe 'Register Sale' do
         customer = {'contact_first_name' => 'Bob', 'contact_last_name' => 'Jones'}
         payload = {'customer_id' => vend_customer_id, 'customer' => customer}
 
-        contact = RegisterSale.new('payload' => payload.to_json).contact
+        contact = RegisterSale.new('payload' => payload.to_json).send(:contact)
         contact.first_name.should eql(customer['contact_first_name'])
         contact.last_name.should eql(customer['contact_last_name'])
         contact.cf_vend_customer_id.should eql(vend_customer_id)
       end
 
-      it "should exclude a sale if the customer is on the block list" do
+      it "should return nil if the customer is on the exclusion list" do
+        FfcrmVend.stub!(:is_customer_in_exclusion_list?).and_return(true)
+        customer = {'contact_first_name' => 'Bob', 'contact_last_name' => 'Jones'}
+        sale = RegisterSale.new('payload' => {'customer' => customer}.to_json)
+        sale.send(:contact).should be_nil
+      end
 
+      it "should not create a customer if there are no customer params" do
+        sale = RegisterSale.new('payload' => {}.to_json)
+        sale.send(:contact).should be_nil
+      end
+
+      it "should not create a customer if there is no first name" do
+        sale = RegisterSale.new('payload' => {'customer' => {'contact_last_name' => 'Test'}}.to_json)
+        sale.send(:contact).should be_nil
+      end
+
+      it "should not create a customer if there is no last name" do
+        sale = RegisterSale.new('payload' => {'customer' => {'contact_first_name' => 'Test'}}.to_json)
+        sale.send(:contact).should be_nil
       end
 
     end
@@ -41,19 +60,19 @@ describe 'Register Sale' do
       end
 
       it do
-        @sale.opportunity.name.should eql("Test Sale 15")
+        @sale.send(:opportunity).name.should eql("Test Sale 15")
       end
       it do
-        @sale.opportunity.amount.to_i.should eql(5)
+        @sale.send(:opportunity).amount.to_i.should eql(5)
       end
       it do
-        @sale.opportunity.closes_on.should eql(Date.parse(@closes_on))
+        @sale.send(:opportunity).closes_on.should eql(Date.parse(@closes_on))
       end
       it do
-        @sale.opportunity.probability.should eql(100)
+        @sale.send(:opportunity).probability.should eql(100)
       end
       it do
-        @sale.opportunity.stage.should eql('won')
+        @sale.send(:opportunity).stage.should eql('won')
       end
 
     end
@@ -64,32 +83,39 @@ describe 'Register Sale' do
         user = FactoryGirl.create(:user)
         payload = {'user' => {'name' => user.email} }
         sale = RegisterSale.new('payload' => payload.to_json)
-        sale.user.should == user
+        sale.send(:user).should == user
       end
 
       it 'should find an existing user by username' do
         user = FactoryGirl.create(:user)
         payload = {'user' => {'name' => user.username} }
         sale = RegisterSale.new('payload' => payload.to_json)
-        sale.user.should == user
+        sale.send(:user).should == user
       end
 
-      it 'should use the default user' do
+      it 'should use the default user when it cannot find intended user' do
         user = FactoryGirl.create(:user)
-        Setting[:ffcrm_vend] = Setting[:ffcrm_vend].merge(:user_id => user.id)
+        FfcrmVend.stub!(:default_user).and_return(user)
         payload = {'user' => {'name' => 'none@example.com'} }
         sale = RegisterSale.new('payload' => payload.to_json)
-        sale.user.should == user
+        sale.send(:user).should == user
       end
 
       it 'should use the default user if email is blank' do
         user = FactoryGirl.create(:user, :email => 'user@example.com')
         bad_user = FactoryGirl.create(:user)
         bad_user.update_column(:email, '')
-        Setting[:ffcrm_vend] = Setting[:ffcrm_vend].merge(:user_id => user.id)
+        FfcrmVend.stub!(:default_user).and_return(user)
         payload = {'user' => {'name' => ''} }
         sale = RegisterSale.new('payload' => payload.to_json)
-        sale.user.should == user
+        sale.send(:user).should == user
+      end
+
+      it 'should use the default user if user params are blank' do
+        user = FactoryGirl.create(:user, :email => 'user@example.com')
+        FfcrmVend.stub!(:default_user).and_return(user)
+        sale = RegisterSale.new('payload' => {}.to_json)
+        sale.send(:user).should == user
       end
 
     end

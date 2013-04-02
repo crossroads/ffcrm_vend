@@ -48,7 +48,11 @@ module FfcrmVend
     end
 
     def exclude_customers
-      Setting.ffcrm_vend.present? ? Setting.ffcrm_vend[:exclude_customers].split("\n").compact.uniq : []
+      if Setting.ffcrm_vend.present? and !(exclude = Setting.ffcrm_vend[:exclude_customers]).blank?
+        exclude.split(/\n+/).compact.uniq
+      else
+        []
+      end
     end
 
     def default_user
@@ -58,6 +62,16 @@ module FfcrmVend
         end
       end
       nil
+    end
+
+    #
+    # Checks to see if customer is in the exclusion list.
+    # If so, the sale is not registered in FFCRM.
+    # Blank names return false, matching names return true
+    #
+    def is_customer_in_exclusion_list?(first_name, last_name)
+      name = [first_name, last_name].join(' ')
+      !name.strip.blank? and FfcrmVend.exclude_customers.include?(name)
     end
 
   end # class

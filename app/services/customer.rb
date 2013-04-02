@@ -3,28 +3,41 @@ class Customer
 
   def initialize(params)
     @params = JSON.parse(params['payload'])
+    PaperTrail.whodunnit = FfcrmVend.default_user.try(:id)
   end
 
   def create
-    PaperTrail.whodunnit = user.try(:id)
-    ActiveRecord::Base.transaction do
-      contact
-      contact_update
+    if contact.present?
+      ActiveRecord::Base.transaction do
+        contact_update
+      end
     end
   end
 
+  private
+
   #
-  # Find a contact by looking up the customer id and/or email address.
-  # Return a new contact if nothing is found.
-  # Ensure blank customer_id / emails do not result in searches
+  # Find a contact by looking for customer id and email address.
+  # Ensure excluded customers are not returned.
+  # Ensure blank customer_id / emails do not result in searches.
+  # Otherwise, return a new contact object
   #
   def contact
-    return @contact unless @contact.blank?
+    return @contact if @contact.present?
 
+    # Is contact in exclusion list?
+    if (contact = params['contact']).present?
+      first_name = contact['first_name']
+      last_name = contact['last_name']
+      return nil if FfcrmVend.is_customer_in_exclusion_list?(first_name, last_name)
+    end
+
+    # Can we find a matching customer_id?
     id = params['id']
     @contact = Contact.where(:cf_vend_customer_id => id).first if id.present?
     return @contact unless @contact.nil?
 
+    # Can we find a matching email address?
     email = params['contact']['email']
     @contact = (Contact.where(:email => email).first || Contact.where(:alt_email => email).first) if email.present?
 
@@ -62,15 +75,6 @@ class Customer
     end
     contact.save
   end
-
-  #
-  # Customer update webhook doesn't include params['user'] so we use the Vend default instead
-  #
-  def user
-    @user ||= FfcrmVend.default_user
-  end
-
-  private
 
   #
   # If a new email address comes in, check whether it's already on the contacts record (search email and alt_email).

@@ -9,7 +9,8 @@ describe 'Customer Update' do
       contact = FactoryGirl.create(:contact, :cf_vend_customer_id => vend_customer_id)
       payload = {'id' => vend_customer_id}
 
-      Customer.new('payload' => payload.to_json).contact.should eql(contact)
+      customer = Customer.new('payload' => payload.to_json)
+      customer.send(:contact).should eql(contact)
     end
 
     it 'should find an existing contact by email' do
@@ -19,7 +20,8 @@ describe 'Customer Update' do
       contact = FactoryGirl.create(:contact, :email => email)
       payload = {'id' => vend_customer_id, 'contact' => contact_params}
 
-      Customer.new('payload' => payload.to_json).contact.should eql(contact)
+      customer = Customer.new('payload' => payload.to_json)
+      customer.send(:contact).should eql(contact)
     end
 
     it 'should find an existing contact by alt_email' do
@@ -29,28 +31,37 @@ describe 'Customer Update' do
       contact = FactoryGirl.create(:contact, :alt_email => email)
       payload = {'id' => vend_customer_id, 'contact' => contact_params}
 
-      Customer.new('payload' => payload.to_json).contact.should eql(contact)
+      customer = Customer.new('payload' => payload.to_json)
+      customer.send(:contact).should eql(contact)
     end
 
     it 'should return a new contact' do
       payload = { 'id' => 'a3ccb1a1-8bc3-11e2-b1f5-4040782fde00', 'contact' => {'email' => 'test@example.com'} }
-      Customer.new('payload' => payload.to_json).contact.should be_new_record
+      customer = Customer.new('payload' => payload.to_json)
+      customer.send(:contact).should be_new_record
     end
 
     it 'should return a new contact if customer_id is nil' do
       contact = FactoryGirl.create(:contact, :cf_vend_customer_id => nil)
       payload = { 'id' => nil, 'contact' => {'email' => 'test@example.com'} }
       customer = Customer.new('payload' => payload.to_json)
-      customer.contact.should_not eql(contact)
-      customer.contact.should be_new_record
+      customer.send(:contact).should_not eql(contact)
+      customer.send(:contact).should be_new_record
     end
 
     it 'should return a new contact if customer_id and email are nil' do
       contact = FactoryGirl.create(:contact, :email => nil)
       payload = { 'id' => nil, 'contact' => {'email' => nil} }
       customer = Customer.new('payload' => payload.to_json)
-      customer.contact.should_not eql(contact)
-      customer.contact.should be_new_record
+      customer.send(:contact).should_not eql(contact)
+      customer.send(:contact).should be_new_record
+    end
+
+    it "should return nil if the customer is on the exclusion list" do
+      FfcrmVend.stub!(:is_customer_in_exclusion_list?).and_return(true)
+      contact = {'contact_first_name' => 'Bob', 'contact_last_name' => 'Jones'}
+      sale = RegisterSale.new('payload' => {'contact' => contact}.to_json)
+      sale.send(:contact).should be_nil
     end
 
   end
