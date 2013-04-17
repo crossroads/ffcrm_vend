@@ -3,6 +3,7 @@ class Customer
 
   def initialize(params)
     @params = JSON.parse(params['payload'])
+    FfcrmVend.log("Processing customer update #{@params}")
     PaperTrail.whodunnit = FfcrmVend.default_user.try(:id)
   end
 
@@ -29,19 +30,30 @@ class Customer
     if (contact = params['contact']).present?
       first_name = contact['first_name']
       last_name = contact['last_name']
-      return nil if FfcrmVend.is_customer_in_exclusion_list?(first_name, last_name)
+      if FfcrmVend.is_customer_in_exclusion_list?(first_name, last_name)
+        FfcrmVend.log('Customer is in exclusion list. Stopping!')
+        return nil
+      end
     end
 
     # Can we find a matching customer_id?
     id = params['id']
     @contact = Contact.where(:cf_vend_customer_id => id).first if id.present?
-    return @contact unless @contact.nil?
+    unless @contact.nil?
+      FfcrmVend.log('Found existing customer vend_id. Updating details')
+      return @contact
+    end
 
     # Can we find a matching email address?
     email = params['contact']['email']
     @contact = (Contact.where(:email => email).first || Contact.where(:alt_email => email).first) if email.present?
+    if @contact
+      FfcrmVend.log('Found existing customer email. Updating details')
+      return @contact
+    end
 
-    @contact ||= Contact.new
+    FfcrmVend.log('Creating new customer')
+    @contact = Contact.new
   end
 
   def contact_update

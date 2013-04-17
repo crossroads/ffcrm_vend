@@ -25,5 +25,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'steak'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'debugger'
-  s.add_dependency 'ffaker'
+  s.add_development_dependency 'ffaker'
 end

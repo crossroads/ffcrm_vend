@@ -11,6 +11,7 @@ module FfcrmVend
                               :sale_prefix => options[:sale_prefix],
                               :token => options[:token],
                               :exclude_customers => options[:exclude_customers],
+                              :use_logger => options[:use_logger] == '1',
                              }
     end
 
@@ -72,6 +73,17 @@ module FfcrmVend
     def is_customer_in_exclusion_list?(first_name, last_name)
       name = [first_name, last_name].join(' ')
       !name.strip.blank? and FfcrmVend.exclude_customers.include?(name)
+    end
+
+    def use_logger?
+      Setting.ffcrm_vend.present? and Setting.ffcrm_vend[:use_logger] == true
+    end
+
+    #
+    # A logger that can be turned on and off
+    #
+    def log(message)
+      Rails.logger.info("FfcrmVend: #{message}") if use_logger?
     end
 
   end # class

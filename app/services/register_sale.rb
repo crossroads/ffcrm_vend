@@ -3,6 +3,7 @@ class RegisterSale
 
   def initialize(params)
     @params = JSON.parse(params['payload'])
+    FfcrmVend.log("Processing order #{@params}")
     PaperTrail.whodunnit = user.try(:id)
   end
 
@@ -32,15 +33,20 @@ class RegisterSale
     if (customer = params['customer']).present?
       first_name = customer['contact_first_name']
       last_name = customer['contact_last_name']
-      return nil if FfcrmVend.is_customer_in_exclusion_list?(first_name, last_name)
+      if FfcrmVend.is_customer_in_exclusion_list?(first_name, last_name)
+        FfcrmVend.log('Customer is in exclusion list. Stopping!')
+        return nil
+      end
     end
 
     @contact = Contact.where(:cf_vend_customer_id => params['customer_id']).first
     return @contact if @contact.present?
 
     if customer and first_name and last_name
+      FfcrmVend.log('Customer not found. Creating.')
       @contact = Contact.create( :first_name => first_name, :last_name => last_name, :cf_vend_customer_id => params['customer_id'] )
     else
+      FfcrmVend.log('Not enough info to create customer.')
       nil
     end
   end
@@ -53,6 +59,8 @@ class RegisterSale
       :probability => 100,
       :stage => "won"
     )
+    FfcrmVend.log('Created #{@opportunity.name}')
+    @opportunity
   end
 
   def contact_opportunity

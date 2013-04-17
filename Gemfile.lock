@@ -36,7 +36,6 @@ PATH
   specs:
     ffcrm_vend (0.0.1)
       fat_free_crm
-      ffaker
       rails (~> 3.2.12)
 
 GEM
@@ -261,6 +260,7 @@ DEPENDENCIES
   debugger
   factory_girl_rails
   fat_free_crm!
+  ffaker
   ffcrm_vend!
   jquery-rails
   pg
