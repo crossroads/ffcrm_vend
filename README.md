@@ -99,8 +99,8 @@ Install the nestfull gem (```gem install nestful```), run your rails server and 
   ```
   require 'nestful'
   token = "your-token"
-  payload = File.open('/path/to/ffcrm_vend/spec/requests/fixtures/register_sale.json').read.gsub('\n', '')
-  Nestful.post 'http://localhost:3000/vend/register_sale', :format => :json, :params => {:payload => payload, :token => token}
+  payload = File.open('/path/to/ffcrm_vend/spec/requests/fixtures/register_sale.json').read
+  Nestful.post 'http://localhost:3000/vend/register_sale', :format => :json, :payload => payload, :token => token
   ```
 
 * To fire a ```customer_update``` webhook use:
@@ -108,8 +108,8 @@ Install the nestfull gem (```gem install nestful```), run your rails server and 
   ```
   require 'nestful'
   token = "your-token"
-  payload = File.open('/path/to/ffcrm_vend/spec/requests/fixtures/customer_update.json').read.gsub('\n', '')
-  Nestful.post 'http://localhost:3000/vend/customer_update', :format => :json, :params => {:payload => payload, :token => token}
+  payload = File.open('/path/to/ffcrm_vend/spec/requests/fixtures/customer_update.json').read
+  Nestful.post 'http://localhost:3000/vend/customer_update', :format => :json, :payload => payload, :token => token
   ```
 
 ## Bug Fixes / Contributions
