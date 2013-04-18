@@ -7,7 +7,7 @@ class Admin::FfcrmVendController < Admin::ApplicationController
   #----------------------------------------------------------------------------
   def index
     @config = FfcrmVend.config
-    @config.token ||= SecureRandom.urlsafe_base64 # set a default token if none exists
+    @token = @config.token.blank? ? SecureRandom.urlsafe_base64 : @config.token
   end
 
   def update

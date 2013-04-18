@@ -12,7 +12,7 @@
 
       .label.top.req
         Authenication token:
-        = text_field_tag 'token', @config.token, :size => 30
+        = text_field_tag 'token', @token, :size => 30
 
       %br
         Use this token to authenticate incoming POST requests. <br/>
@@ -23,10 +23,10 @@
       %ul
         %li{:style => 'list-style-type: disc; list-style-position: inside;'}
           Register Sale:
-          =link_to vend_register_sale_url(:token => @config.token), vend_register_sale_url(:token => @config.token)
+          =link_to vend_register_sale_url(:token => @token), vend_register_sale_url(:token => @token)
         %li{:style => 'list-style-type: disc; list-style-position: inside;'}
           Customer Update:
-          =link_to vend_customer_update_url(:token => @config.token), vend_customer_update_url(:token => @config.token)
+          =link_to vend_customer_update_url(:token => @token), vend_customer_update_url(:token => @token)
 
       %br
       .label.top.req
