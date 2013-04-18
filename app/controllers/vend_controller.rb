@@ -20,7 +20,7 @@ class VendController < ActionController::Base
     body = CGI::parse(request.body.read)
     data = { 'payload' => body['payload'][0] }
     Customer.new(data).create
-    respond_with({}, :location => nil)
+    respond_with({}, :location => nil, :status => 200)
   end
 
   # Takes input from an IronMQ queue, if you like that sort of thing
@@ -28,7 +28,7 @@ class VendController < ActionController::Base
     body = CGI::parse(request.body.read)
     data = { 'payload' => body['payload'][0] }
     RegisterSale.new(data).create
-    respond_with({}, :location => nil)
+    respond_with({}, :location => nil, :status => 200)
   end
 
   private
