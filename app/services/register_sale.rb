@@ -53,7 +53,7 @@ class RegisterSale
 
   def opportunity
     @opportunity ||= Opportunity.create!(
-      :name => "#{FfcrmVend.sale_prefix} #{params['invoice_number']}",
+      :name => "#{FfcrmVend.config.sale_prefix} #{params['invoice_number']}",
       :amount => params['totals']['total_payment'],
       :closes_on => params['sale_date'],
       :probability => 100,

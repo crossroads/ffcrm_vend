@@ -17,7 +17,7 @@ feature 'Register Sale' do
     }.should_not change(Contact, :count).by(1)
 
     opportunity = Opportunity.last
-    opportunity.name.should eql("#{FfcrmVend.sale_prefix} #{register_sale["invoice_number"]}")
+    opportunity.name.should eql("#{FfcrmVend.config.sale_prefix} #{register_sale["invoice_number"]}")
     opportunity.closes_on.should eql(Date.parse(register_sale['sale_date']))
     opportunity.probability.should eql(100)
 

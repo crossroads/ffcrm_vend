@@ -35,7 +35,7 @@ class VendController < ActionController::Base
 
   # Note: this allows a blank token to effectively turn off authentication
   def authenticate
-    unless FfcrmVend.token == params[:token]
+    unless FfcrmVend.config.token == params[:token]
       render :text => "", :status => :unauthorized
     end
   end

@@ -7,12 +7,12 @@
     = form_tag 'ffcrm_vend', :method => :put do
       .label.top.req
         Vend ID:
-        = text_field_tag 'vend_id', @vend_id, :size => 30
+        = text_field_tag 'vend_id', @config.vend_id, :size => 30
       %br
 
       .label.top.req
         Authenication token:
-        = text_field_tag 'token', @token, :size => 30
+        = text_field_tag 'token', @config.token, :size => 30
 
       %br
         Use this token to authenticate incoming POST requests. <br/>
@@ -23,15 +23,15 @@
       %ul
         %li{:style => 'list-style-type: disc; list-style-position: inside;'}
           Register Sale:
-          =link_to vend_register_sale_url(:token => @token), vend_register_sale_url(:token => @token)
+          =link_to vend_register_sale_url(:token => @config.token), vend_register_sale_url(:token => @config.token)
         %li{:style => 'list-style-type: disc; list-style-position: inside;'}
           Customer Update:
-          =link_to vend_customer_update_url(:token => @token), vend_customer_update_url(:token => @token)
+          =link_to vend_customer_update_url(:token => @config.token), vend_customer_update_url(:token => @config.token)
 
       %br
       .label.top.req
         Default user:
-        - user_options = options_from_collection_for_select(all_users, 'id', 'full_name', @user_id)
+        - user_options = options_from_collection_for_select(all_users, 'id', 'full_name', @config.user_id)
         = select_tag('user_id', options_for_select(user_options), :class => 'chzn-select', :style => "width:160px")
       %br
         This is the default user for actions that occur via webhooks.
@@ -41,7 +41,7 @@
       %br
       .label.top.req
         Sale prefix:
-        = text_field_tag 'sale_prefix', @sale_prefix, :size => 50
+        = text_field_tag 'sale_prefix', @config.sale_prefix, :size => 50
       %br
         This prefix forms part of the opportunity name when a sale is created.
         Example: if the prefix is "My Sale" then sales opportunities named "My Sale 15"
@@ -55,10 +55,10 @@
         customers that you don't want sales to be marked against. Use the full name of the customer.
         Each name must go on a separate line.
       %br
-        = text_area_tag 'exclude_customers', @exclude_customers, :size => "25x10"
+        = text_area_tag 'exclude_customers', @config.exclude_customers_string, :size => "25x10"
 
       %br
-      = check_box_tag 'use_logger', '1', @use_logger
+      = check_box_tag 'use_logger', '1', @config.use_logger?
       .label.top.req
         Turn on extra log information
       %br
