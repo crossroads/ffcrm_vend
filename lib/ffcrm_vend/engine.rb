@@ -4,7 +4,7 @@ module FfcrmVend
     config.to_prepare do
       tab_urls = FatFreeCRM::Tabs.admin.map{|tab| tab[:url]}.map{|url| url[:controller]}
       unless tab_urls.include? 'admin/ffcrm_vend'
-        FatFreeCRM::Tabs.admin << {:url => { :controller => "admin/ffcrm_vend" }, :text => "Vend"}
+        FatFreeCRM::Tabs.admin << {:url => { :controller => "admin/ffcrm_vend" }, :text => "Vend", :icon => 'fa-usd'}
       end
     end
 
