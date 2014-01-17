@@ -4,7 +4,7 @@ describe FfcrmVend::Config do
 
   let(:config) { FfcrmVend::Config.new }
   let(:settings) { {:vend_id => '12345', :user_id => 'admin', :sale_prefix => "Sale", :token => 'XYZ', :exclude_customers => "steve\njohn", :use_logger => true} }
-  before { Setting.stub!(:ffcrm_vend).and_return(settings) }
+  before { Setting.stub(:ffcrm_vend).and_return(settings) }
 
   it "should return the endpoint" do
     config.vend_id.should == settings[:vend_id]
@@ -30,27 +30,27 @@ describe FfcrmVend::Config do
   describe "exclude_customers" do
 
     it "should return a list of customers" do
-      Setting.stub!(:ffcrm_vend).and_return(:exclude_customers => "Bob Jones\nSteve Jobs")
+      Setting.stub(:ffcrm_vend).and_return(:exclude_customers => "Bob Jones\nSteve Jobs")
       config.exclude_customers.should eql(['Bob Jones', 'Steve Jobs'])
     end
 
     it "should return empty list if no settings saved" do
-      Setting.stub!(:ffcrm_vend).and_return(nil)
+      Setting.stub(:ffcrm_vend).and_return(nil)
       config.exclude_customers.should eql([])
     end
 
     it "should return empty list if empty setting saved" do
-      Setting.stub!(:ffcrm_vend).and_return(:exclude_customers => "")
+      Setting.stub(:ffcrm_vend).and_return(:exclude_customers => "")
       config.exclude_customers.should eql([])
     end
 
     it "should remove blank lines" do
-      Setting.stub!(:ffcrm_vend).and_return(:exclude_customers => "Bob Jones\n\n\nSteve Jobs")
+      Setting.stub(:ffcrm_vend).and_return(:exclude_customers => "Bob Jones\n\n\nSteve Jobs")
       config.exclude_customers.should eql(['Bob Jones', 'Steve Jobs'])
     end
 
     it "should not return duplicates" do
-      Setting.stub!(:ffcrm_vend).and_return(:exclude_customers => "Bob Jones\nSteve Jobs\nBob Jones")
+      Setting.stub(:ffcrm_vend).and_return(:exclude_customers => "Bob Jones\nSteve Jobs\nBob Jones")
       config.exclude_customers.should eql(['Bob Jones', 'Steve Jobs'])
     end
 

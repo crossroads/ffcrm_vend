@@ -27,7 +27,7 @@ describe 'Register Sale' do
       end
 
       it "should return nil if the customer is on the exclusion list" do
-        FfcrmVend.stub!(:is_customer_in_exclusion_list?).and_return(true)
+        FfcrmVend.stub(:is_customer_in_exclusion_list?).and_return(true)
         customer = {'contact_first_name' => 'Bob', 'contact_last_name' => 'Jones'}
         sale = RegisterSale.new('payload' => {'customer' => customer}.to_json)
         sale.send(:contact).should be_nil
@@ -54,7 +54,7 @@ describe 'Register Sale' do
 
       before(:each) do
         @closes_on = '2013-03-27'
-        FfcrmVend.stub!(:sale_prefix).and_return('Test Sale')
+        FfcrmVend.stub(:sale_prefix).and_return('Test Sale')
         payload = {'invoice_number' => '15', 'sale_date' => @closes_on, 'totals' => {'total_payment' => '5'}, 'user' => {'name' => 'test@example.com'} }
         @sale = RegisterSale.new('payload' => payload.to_json)
       end
@@ -95,7 +95,7 @@ describe 'Register Sale' do
 
       it 'should use the default user when it cannot find intended user' do
         user = FactoryGirl.create(:user)
-        FfcrmVend.stub!(:default_user).and_return(user)
+        FfcrmVend.stub(:default_user).and_return(user)
         payload = {'user' => {'name' => 'none@example.com'} }
         sale = RegisterSale.new('payload' => payload.to_json)
         sale.send(:user).should == user
@@ -105,7 +105,7 @@ describe 'Register Sale' do
         user = FactoryGirl.create(:user, :email => 'user@example.com')
         bad_user = FactoryGirl.create(:user)
         bad_user.update_column(:email, '')
-        FfcrmVend.stub!(:default_user).and_return(user)
+        FfcrmVend.stub(:default_user).and_return(user)
         payload = {'user' => {'name' => ''} }
         sale = RegisterSale.new('payload' => payload.to_json)
         sale.send(:user).should == user
@@ -113,7 +113,7 @@ describe 'Register Sale' do
 
       it 'should use the default user if user params are blank' do
         user = FactoryGirl.create(:user, :email => 'user@example.com')
-        FfcrmVend.stub!(:default_user).and_return(user)
+        FfcrmVend.stub(:default_user).and_return(user)
         sale = RegisterSale.new('payload' => {}.to_json)
         sale.send(:user).should == user
       end

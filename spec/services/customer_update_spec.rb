@@ -58,7 +58,7 @@ describe 'Customer Update' do
     end
 
     it "should return nil if the customer is on the exclusion list" do
-      FfcrmVend.stub!(:is_customer_in_exclusion_list?).and_return(true)
+      FfcrmVend.stub(:is_customer_in_exclusion_list?).and_return(true)
       contact = {'contact_first_name' => 'Bob', 'contact_last_name' => 'Jones'}
       sale = RegisterSale.new('payload' => {'contact' => contact}.to_json)
       sale.send(:contact).should be_nil

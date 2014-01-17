@@ -5,9 +5,9 @@ describe 'FfcrmVend' do
   describe "is_customer_in_exclusion_list?" do
 
     before do
-      config = mock('config')
-      config.stub!(:exclude_customers).and_return(['Bob Jones'])
-      FfcrmVend.stub!(:config).and_return(config)
+      config = double('config')
+      config.stub(:exclude_customers).and_return(['Bob Jones'])
+      FfcrmVend.stub(:config).and_return(config)
     end
 
     it "should return true" do
