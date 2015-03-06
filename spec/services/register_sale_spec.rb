@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'Register Sale' do
 
@@ -12,7 +12,7 @@ describe 'Register Sale' do
         payload = {'customer_id' => vend_customer_id}
 
         sale = RegisterSale.new('payload' => payload.to_json)
-        sale.send(:contact).should eql(contact)
+        expect(sale.send(:contact)).to eql(contact)
       end
 
       it "should create a new contact with first_name, last_name and customer_id" do
@@ -21,58 +21,59 @@ describe 'Register Sale' do
         payload = {'customer_id' => vend_customer_id, 'customer' => customer}
 
         contact = RegisterSale.new('payload' => payload.to_json).send(:contact)
-        contact.first_name.should eql(customer['contact_first_name'])
-        contact.last_name.should eql(customer['contact_last_name'])
-        contact.cf_vend_customer_id.should eql(vend_customer_id)
+        expect(contact.first_name).to eql(customer['contact_first_name'])
+        expect(contact.last_name).to eql(customer['contact_last_name'])
+        expect(contact.cf_vend_customer_id).to eql(vend_customer_id)
       end
 
       it "should return nil if the customer is on the exclusion list" do
-        FfcrmVend.stub(:is_customer_in_exclusion_list?).and_return(true)
+        expect(FfcrmVend).to receive(:is_customer_in_exclusion_list?).and_return(true)
         customer = {'contact_first_name' => 'Bob', 'contact_last_name' => 'Jones'}
         sale = RegisterSale.new('payload' => {'customer' => customer}.to_json)
-        sale.send(:contact).should be_nil
+        expect(sale.send(:contact)).to be_nil
       end
 
       it "should not create a customer if there are no customer params" do
         sale = RegisterSale.new('payload' => {}.to_json)
-        sale.send(:contact).should be_nil
+        expect(sale.send(:contact)).to be_nil
       end
 
       it "should not create a customer if there is no first name" do
         sale = RegisterSale.new('payload' => {'customer' => {'contact_last_name' => 'Test'}}.to_json)
-        sale.send(:contact).should be_nil
+        expect(sale.send(:contact)).to be_nil
       end
 
       it "should not create a customer if there is no last name" do
         sale = RegisterSale.new('payload' => {'customer' => {'contact_first_name' => 'Test'}}.to_json)
-        sale.send(:contact).should be_nil
+        expect(sale.send(:contact)).to be_nil
       end
 
     end
 
     describe "opportunity" do
 
-      before(:each) do
-        @closes_on = '2013-03-27'
-        FfcrmVend.stub(:sale_prefix).and_return('Test Sale')
-        payload = {'invoice_number' => '15', 'sale_date' => @closes_on, 'totals' => {'total_payment' => '5'}, 'user' => {'name' => 'test@example.com'} }
-        @sale = RegisterSale.new('payload' => payload.to_json)
+      let(:closes_on) { '2013-03-27' }
+      let(:payload) { {'invoice_number' => '15', 'sale_date' => closes_on, 'totals' => {'total_payment' => '5'}, 'user' => {'name' => 'test@example.com'} } }
+      let(:sale) { RegisterSale.new('payload' => payload.to_json) }
+      
+      before(:each) do  
+        allow(FfcrmVend).to receive(:sale_prefix).and_return('Test Sale')
       end
-
+      
       it do
-        @sale.send(:opportunity).name.should eql("Test Sale 15")
-      end
-      it do
-        @sale.send(:opportunity).amount.to_i.should eql(5)
+        expect(sale.send(:opportunity).name).to eql("Test Sale 15")
       end
       it do
-        @sale.send(:opportunity).closes_on.should eql(Date.parse(@closes_on))
+        expect(sale.send(:opportunity).amount.to_i).to eql(5)
       end
       it do
-        @sale.send(:opportunity).probability.should eql(100)
+        expect(sale.send(:opportunity).closes_on).to eql(Date.parse(closes_on))
       end
       it do
-        @sale.send(:opportunity).stage.should eql('won')
+        expect(sale.send(:opportunity).probability).to eql(100)
+      end
+      it do
+        expect(sale.send(:opportunity).stage).to eql('won')
       end
 
     end
@@ -83,39 +84,39 @@ describe 'Register Sale' do
         user = FactoryGirl.create(:user)
         payload = {'user' => {'name' => user.email} }
         sale = RegisterSale.new('payload' => payload.to_json)
-        sale.send(:user).should == user
+        expect(sale.send(:user)).to eql(user)
       end
 
       it 'should find an existing user by username' do
         user = FactoryGirl.create(:user)
         payload = {'user' => {'name' => user.username} }
         sale = RegisterSale.new('payload' => payload.to_json)
-        sale.send(:user).should == user
+        expect(sale.send(:user)).to eql(user)
       end
 
       it 'should use the default user when it cannot find intended user' do
         user = FactoryGirl.create(:user)
-        FfcrmVend.stub(:default_user).and_return(user)
+        expect(FfcrmVend).to receive(:default_user).and_return(user)
         payload = {'user' => {'name' => 'none@example.com'} }
         sale = RegisterSale.new('payload' => payload.to_json)
-        sale.send(:user).should == user
+        expect(sale.send(:user)).to eql(user)
       end
 
       it 'should use the default user if email is blank' do
         user = FactoryGirl.create(:user, :email => 'user@example.com')
         bad_user = FactoryGirl.create(:user)
         bad_user.update_column(:email, '')
-        FfcrmVend.stub(:default_user).and_return(user)
+        expect(FfcrmVend).to receive(:default_user).and_return(user)
         payload = {'user' => {'name' => ''} }
         sale = RegisterSale.new('payload' => payload.to_json)
-        sale.send(:user).should == user
+        expect(sale.send(:user)).to eql(user)
       end
 
       it 'should use the default user if user params are blank' do
         user = FactoryGirl.create(:user, :email => 'user@example.com')
-        FfcrmVend.stub(:default_user).and_return(user)
+        expect(FfcrmVend).to receive(:default_user).and_return(user)
         sale = RegisterSale.new('payload' => {}.to_json)
-        sale.send(:user).should == user
+        expect(sale.send(:user)).to eql(user)
       end
 
     end

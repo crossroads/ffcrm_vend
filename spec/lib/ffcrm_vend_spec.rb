@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'FfcrmVend' do
 
@@ -6,20 +6,20 @@ describe 'FfcrmVend' do
 
     before do
       config = double('config')
-      config.stub(:exclude_customers).and_return(['Bob Jones'])
-      FfcrmVend.stub(:config).and_return(config)
+      allow(config).to receive(:exclude_customers).and_return(['Bob Jones'])
+      allow(FfcrmVend).to receive(:config).and_return(config)
     end
 
     it "should return true" do
-      FfcrmVend.is_customer_in_exclusion_list?('Bob', 'Jones').should be_true
+      expect(FfcrmVend.is_customer_in_exclusion_list?('Bob', 'Jones')).to eql(true)
     end
 
     it "should return false" do
-      FfcrmVend.is_customer_in_exclusion_list?('Darth', 'Vader').should be_false
+      expect(FfcrmVend.is_customer_in_exclusion_list?('Darth', 'Vader')).to eql(false)
     end
 
     it "should return false if empty name" do
-      FfcrmVend.is_customer_in_exclusion_list?('', '').should be_false
+      expect(FfcrmVend.is_customer_in_exclusion_list?('', '')).to eql(false)
     end
 
   end
