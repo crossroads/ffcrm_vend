@@ -10,4 +10,4 @@ gem "jquery-rails"
 
 gem 'fat_free_crm', :git => 'git://github.com/fatfreecrm/fat_free_crm.git'
 
-gem 'byebug'
+gem 'byebug' unless ENV['CI']
