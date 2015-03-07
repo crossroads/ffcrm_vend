@@ -18,9 +18,9 @@ class Customer
   private
 
   #
-  # Find a contact by looking for customer id and email address.
+  # Find a contact by looking for customer id, email address and phone number.
   # Ensure excluded customers are not returned.
-  # Ensure blank customer_id / emails do not result in searches.
+  # Ensure blank customer_id / phone numbers / emails do not result in searches.
   # Otherwise, return a new contact object
   #
   def contact
@@ -49,6 +49,14 @@ class Customer
     @contact = (Contact.where(:email => email).first || Contact.where(:alt_email => email).first) if email.present?
     if @contact
       FfcrmVend.log('Found existing customer email. Updating details')
+      return @contact
+    end
+
+    # Can we find a matching phone number?
+    phone = params['contact']['phone']
+    @contact = Contact.where("phone = ? OR mobile = ?", phone, phone).first if phone.present?
+    if @contact
+      FfcrmVend.log('Found existing customer phone. Updating details')
       return @contact
     end
 

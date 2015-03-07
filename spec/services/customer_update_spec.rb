@@ -35,6 +35,28 @@ describe 'Customer Update' do
       expect(customer.send(:contact)).to eql(contact)
     end
 
+    it 'should find an existing contact by phone' do
+      vend_customer_id = 'a3ccb1a1-8bc3-11e2-b1f5-4040782fde00'
+      phone = '12345678'
+      contact_params = {'phone' => phone}
+      contact = FactoryGirl.create(:contact, phone: phone)
+      payload = {'id' => vend_customer_id, 'contact' => contact_params}
+
+      customer = Customer.new('payload' => payload.to_json)
+      expect(customer.send(:contact)).to eql(contact)
+    end
+
+    it 'should find an existing contact by mobile' do
+      vend_customer_id = 'a3ccb1a1-8bc3-11e2-b1f5-4040782fde00'
+      phone = '12345678'
+      contact_params = {'phone' => phone}
+      contact = FactoryGirl.create(:contact, mobile: phone)
+      payload = {'id' => vend_customer_id, 'contact' => contact_params}
+
+      customer = Customer.new('payload' => payload.to_json)
+      expect(customer.send(:contact)).to eql(contact)
+    end
+
     it 'should return a new contact' do
       payload = { 'id' => 'a3ccb1a1-8bc3-11e2-b1f5-4040782fde00', 'contact' => {'email' => 'test@example.com'} }
       customer = Customer.new('payload' => payload.to_json)
