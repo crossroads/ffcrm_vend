@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/fatfreecrm/fat_free_crm.git
-  revision: e9707a0622387a895e9b449a7ba986bcd518c658
+  revision: 66261859369b78d1ce6f047e631eb6ad87ddef33
   specs:
     fat_free_crm (0.13.6)
       acts-as-taggable-on (~> 2.3.3)
@@ -9,6 +9,7 @@ GIT
       authlogic (= 3.1.0)
       cancan
       cocaine
+      coffee-script-source (~> 1.8.0)
       dynamic_form
       email_reply_parser_ffcrm
       ffaker (>= 1.12.0)
@@ -96,6 +97,7 @@ GEM
     cocaine (0.5.7)
       climate_control (>= 0.0.3, < 1.0)
     coderay (1.1.0)
+    coffee-script-source (1.8.0)
     columnize (0.9.0)
     css_parser (1.3.6)
       addressable

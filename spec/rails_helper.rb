@@ -6,8 +6,6 @@ require 'spec_helper'
 require 'factory_girl_rails'
 require 'ffaker'
 
-PROTOTYPE_JS = %w{prototype effects dragdrop controls}
-
 Rails.backtrace_cleaner.remove_silencers!
 
 # Requires supporting ruby files with custom matchers and macros, etc,
