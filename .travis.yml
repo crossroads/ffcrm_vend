@@ -5,5 +5,9 @@ rvm:
 
 bundler_args: --path=vendor/bundle --without heroku
 
+before_script:
+  - sh -c "psql -c 'create database ffcrm_vend_test;' -U postgres"
+  - sh -c "RAILS_ENV=test bundle exec rake db:schema:load"
+
 # Run specs
 script: "bundle exec rake"
