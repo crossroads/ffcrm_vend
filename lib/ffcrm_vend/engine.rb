@@ -16,5 +16,13 @@ module FfcrmVend
       g.helper false
     end
 
+    initializer :append_migrations do |app|
+      unless "#{root}/spec/dummy" == app.root.to_s
+        config.paths["db/migrate"].expanded.each do |expanded_path|
+          app.config.paths["db/migrate"] << expanded_path
+        end
+      end
+    end
+
   end
 end
