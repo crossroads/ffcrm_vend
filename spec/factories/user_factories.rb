@@ -1,14 +1,14 @@
 FactoryGirl.define do
   factory :user do
     username            { FactoryGirl.generate(:username) }
-    email               { Faker::Internet.email }
-    first_name          { Faker::Name.first_name }
-    last_name           { Faker::Name.last_name }
+    email               { FFaker::Internet.email }
+    first_name          { FFaker::Name.first_name }
+    last_name           { FFaker::Name.last_name }
     title               nil
-    company             { Faker::Company.name }
-    alt_email           { Faker::Internet.email }
-    phone               { Faker::PhoneNumber.phone_number }
-    mobile              { Faker::PhoneNumber.phone_number }
+    company             { FFaker::Company.name }
+    alt_email           { FFaker::Internet.email }
+    phone               { FFaker::PhoneNumber.phone_number }
+    mobile              { FFaker::PhoneNumber.phone_number }
     aim                 nil
     yahoo               nil
     google              nil
@@ -19,7 +19,6 @@ FactoryGirl.define do
     persistence_token   "d7cdeffd3625f7cb265b21126b85da7c930d47c4a708365c20eb857560055a6b57c9775becb8a957dfdb46df8aee17eb120a011b380e9cc0882f9dfaa2b7ba26"
     perishable_token    "TarXlrOPfaokNOzls2U8"
     single_access_token nil
-    last_request_at     { FactoryGirl.generate(:time) }
     current_login_at    { FactoryGirl.generate(:time) }
     last_login_at       { FactoryGirl.generate(:time) }
     last_login_ip       "127.0.0.1"
@@ -34,7 +33,7 @@ FactoryGirl.define do
   end
 
   sequence :username do |n|
-    Faker::Internet.user_name + n.to_s  # make sure it's unique by appending sequence number
+    FFaker::Internet.user_name + n.to_s  # make sure it's unique by appending sequence number
   end
 
   sequence :time do |n|
