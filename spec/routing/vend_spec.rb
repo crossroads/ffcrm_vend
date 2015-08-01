@@ -42,10 +42,10 @@ describe 'VendController', type: :routing do
 
     describe "admin/vend" do
       it "GET html" do
-        expect(:get => "/admin/ffcrm_vend").to route_to(:controller => "admin/ffcrm_vend", :action => "index")
+        expect(:get => "/admin/ffcrm_vend").to route_to(:controller => "admin/ffcrm_vend", :action => "index", :format => "html")
       end
       it "PUT html" do
-        expect(:put => "/admin/ffcrm_vend").to route_to(:controller => "admin/ffcrm_vend", :action => "update")
+        expect(:put => "/admin/ffcrm_vend").to route_to(:controller => "admin/ffcrm_vend", :action => "update", :format => "html")
       end
     end
 
