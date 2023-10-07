@@ -74,15 +74,6 @@ The ```/vend/customer_update``` route responds to Vend's ```customer.update``` w
 
 Note: data is not overriden if the new value is blank.
 
-## IronMQ support
-
-You may wish to push your Vend webhook to a queue which can then feed your Fat Free CRM instance with the data. The advantage of this is that if your Fat Free CRM instance is down, the queue will hold the transaction until it comes back up (assuming it doesn't go beyond the retry limits.)
-
-* You will need to setup an IronIO account over at http://www.iron.io/  You can get 10 million requests per month for free!
-* Then you will need to setup a Push Queue, see http://blog.iron.io/2013/01/ironmq-push-queues-reliable-message.html
-* Next, configure Vend webhooks to push to the queue. See http://blog.iron.io/2013/01/queue-webhook-events-with-ironmq.html
-* You must also tell the queue to push to your Fat Free CRM instance, use the ```/vend/register_sale_mq``` and ```/vend/customer_mq``` endpoints.
-
 ## Tests
 
 Run ```rake``` to setup the database and run the specs.
