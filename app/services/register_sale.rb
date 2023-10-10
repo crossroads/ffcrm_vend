@@ -4,7 +4,7 @@ class RegisterSale
   def initialize(params)
     @params = JSON.parse(params['payload'])
     FfcrmVend.log("Processing order #{@params}")
-    PaperTrail.whodunnit = user.try(:id)
+    PaperTrail.request.whodunnit = user.try(:id)
   end
 
   def create
@@ -44,7 +44,7 @@ class RegisterSale
 
     if customer and first_name and last_name
       FfcrmVend.log('Customer not found. Creating.')
-      @contact = Contact.create( :first_name => first_name, :last_name => last_name, :cf_vend_customer_id => params['customer_id'] )
+      @contact = Contact.create!( first_name: first_name, last_name: last_name, cf_vend_customer_id: params['customer_id'], user: user )
     else
       FfcrmVend.log('Not enough info to create customer.')
       nil

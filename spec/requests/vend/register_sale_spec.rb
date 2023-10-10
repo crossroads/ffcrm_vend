@@ -6,14 +6,14 @@ RSpec.describe VendController, type: "controller" do
   let(:register_sale) { JSON.parse(register_sale_json) }
 
   it 'should create a contact and opportunity for a new customer_id' do
-    # First sale you a customer id should create an contact
+    # First sale with a customer id should create a contact
     expect {
-      post :register_sale, format: "json", payload: register_sale_json
+      post :register_sale, format: "json", params: { payload: register_sale_json }
     }.to change(Contact, :count).by(1)
 
     # Subsequent sales should attach to the same contact
     expect {
-      post :register_sale, format: "json", payload: register_sale_json
+      post :register_sale, format: "json", params: { payload: register_sale_json }
     }.to change(Contact, :count).by(0)
 
     opportunity = Opportunity.last
@@ -28,8 +28,8 @@ RSpec.describe VendController, type: "controller" do
   end
 
   it 'rejected token' do
-    Setting.ffcrm_vend = Setting.ffcrm_vend.merge(:token => SecureRandom.urlsafe_base64)
-    post :register_sale, format: "json", payload: register_sale_json, token: 'XYZ'
+    Setting["ffcrm_vend"] = Setting["ffcrm_vend"].merge(token: SecureRandom.urlsafe_base64)
+    post :register_sale, format: "json", params: { payload: register_sale_json, token: 'XYZ' }
     expect(response.response_code).to eql(401)
   end
 

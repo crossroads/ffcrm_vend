@@ -8,7 +8,7 @@ describe 'Register Sale' do
 
       it "should find an existing contact" do
         vend_customer_id = 'a3ccb1a1-8bc3-11e2-b1f5-4040782fde00'
-        contact = FactoryGirl.create(:contact, :cf_vend_customer_id => vend_customer_id)
+        contact = FactoryBot.create(:contact, :cf_vend_customer_id => vend_customer_id)
         payload = {'customer_id' => vend_customer_id}
 
         sale = RegisterSale.new('payload' => payload.to_json)
@@ -81,21 +81,21 @@ describe 'Register Sale' do
     describe "user" do
 
       it 'should find an existing user by email' do
-        user = FactoryGirl.create(:user)
+        user = FactoryBot.create(:user)
         payload = {'user' => {'name' => user.email} }
         sale = RegisterSale.new('payload' => payload.to_json)
         expect(sale.send(:user)).to eql(user)
       end
 
       it 'should find an existing user by username' do
-        user = FactoryGirl.create(:user)
+        user = FactoryBot.create(:user)
         payload = {'user' => {'name' => user.username} }
         sale = RegisterSale.new('payload' => payload.to_json)
         expect(sale.send(:user)).to eql(user)
       end
 
       it 'should use the default user when it cannot find intended user' do
-        user = FactoryGirl.create(:user)
+        user = FactoryBot.create(:user)
         expect(FfcrmVend).to receive(:default_user).and_return(user)
         payload = {'user' => {'name' => 'none@example.com'} }
         sale = RegisterSale.new('payload' => payload.to_json)
@@ -103,8 +103,8 @@ describe 'Register Sale' do
       end
 
       it 'should use the default user if email is blank' do
-        user = FactoryGirl.create(:user, :email => 'user@example.com')
-        bad_user = FactoryGirl.create(:user)
+        user = FactoryBot.create(:user, :email => 'user@example.com')
+        bad_user = FactoryBot.create(:user)
         bad_user.update_column(:email, '')
         expect(FfcrmVend).to receive(:default_user).and_return(user)
         payload = {'user' => {'name' => ''} }
@@ -113,7 +113,7 @@ describe 'Register Sale' do
       end
 
       it 'should use the default user if user params are blank' do
-        user = FactoryGirl.create(:user, :email => 'user@example.com')
+        user = FactoryBot.create(:user, :email => 'user@example.com')
         expect(FfcrmVend).to receive(:default_user).and_return(user)
         sale = RegisterSale.new('payload' => {}.to_json)
         expect(sale.send(:user)).to eql(user)

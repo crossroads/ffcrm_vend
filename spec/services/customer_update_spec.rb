@@ -6,7 +6,7 @@ describe 'Customer Update' do
 
     it 'should find an existing contact by customer_id' do
       vend_customer_id = 'a3ccb1a1-8bc3-11e2-b1f5-4040782fde00'
-      contact = FactoryGirl.create(:contact, :cf_vend_customer_id => vend_customer_id)
+      contact = FactoryBot.create(:contact, :cf_vend_customer_id => vend_customer_id)
       payload = {'id' => vend_customer_id}
 
       customer = Customer.new('payload' => payload.to_json)
@@ -17,7 +17,7 @@ describe 'Customer Update' do
       vend_customer_id = 'a3ccb1a1-8bc3-11e2-b1f5-4040782fde00'
       email = 'test@example.com'
       contact_params = {'email' => email}
-      contact = FactoryGirl.create(:contact, :email => email)
+      contact = FactoryBot.create(:contact, :email => email)
       payload = {'id' => vend_customer_id, 'contact' => contact_params}
 
       customer = Customer.new('payload' => payload.to_json)
@@ -28,7 +28,7 @@ describe 'Customer Update' do
       vend_customer_id = 'a3ccb1a1-8bc3-11e2-b1f5-4040782fde00'
       email = 'test@example.com'
       contact_params = {'email' => email}
-      contact = FactoryGirl.create(:contact, :alt_email => email)
+      contact = FactoryBot.create(:contact, :alt_email => email)
       payload = {'id' => vend_customer_id, 'contact' => contact_params}
 
       customer = Customer.new('payload' => payload.to_json)
@@ -39,7 +39,7 @@ describe 'Customer Update' do
       vend_customer_id = 'a3ccb1a1-8bc3-11e2-b1f5-4040782fde00'
       phone = '12345678'
       contact_params = {'phone' => phone}
-      contact = FactoryGirl.create(:contact, phone: phone)
+      contact = FactoryBot.create(:contact, phone: phone)
       payload = {'id' => vend_customer_id, 'contact' => contact_params}
 
       customer = Customer.new('payload' => payload.to_json)
@@ -50,7 +50,7 @@ describe 'Customer Update' do
       vend_customer_id = 'a3ccb1a1-8bc3-11e2-b1f5-4040782fde00'
       phone = '12345678'
       contact_params = {'phone' => phone}
-      contact = FactoryGirl.create(:contact, mobile: phone)
+      contact = FactoryBot.create(:contact, mobile: phone)
       payload = {'id' => vend_customer_id, 'contact' => contact_params}
 
       customer = Customer.new('payload' => payload.to_json)
@@ -64,7 +64,7 @@ describe 'Customer Update' do
     end
 
     it 'should return a new contact if customer_id is nil' do
-      contact = FactoryGirl.create(:contact, :cf_vend_customer_id => nil)
+      contact = FactoryBot.create(:contact, :cf_vend_customer_id => nil)
       payload = { 'id' => nil, 'contact' => {'email' => 'test@example.com'} }
       customer = Customer.new('payload' => payload.to_json)
       expect(customer.send(:contact)).not_to eql(contact)
@@ -72,7 +72,7 @@ describe 'Customer Update' do
     end
 
     it 'should return a new contact if customer_id and email are nil' do
-      contact = FactoryGirl.create(:contact, :email => nil)
+      contact = FactoryBot.create(:contact, :email => nil)
       payload = { 'id' => nil, 'contact' => {'email' => nil} }
       customer = Customer.new('payload' => payload.to_json)
       expect(customer.send(:contact)).not_to eql(contact)

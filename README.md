@@ -6,7 +6,7 @@ A plugin for Fat Free CRM that provides several endpoints to receive Vend webhoo
 
 Add ```ffcrm_vend``` to your Fat Free CRM application Gemfile and run bundle install.
 
-```gem 'ffcrm_vend', :github => 'crossroads/ffcrm_vend'```
+```gem 'ffcrm_vend', git: 'https://github.com/crossroads/ffcrm_vend'```
 
 ## Setup
 
@@ -40,7 +40,7 @@ The ```/vend/register_sale``` route responds to the ```sale.update``` payloads f
 
 When a sale webhook comes in, FfcrmVend does the following:
 
-* Determines the user that carried out the action and sets the ```PaperTrail.whodunnit``` field
+* Determines the user that carried out the action and sets the ```PaperTrail.request.whodunnit``` field
  * The username of the Vend cashier who made the sale is usually included in the payload. If there is a corresponding user with the same email address or username in Fat Free CRM, then they are selected. Otherwise, the default user (set in the Admin -> Vend tab) is used.
 * Checks to see if the customer name is in the exclusion list (see Admin tab -> Vend). If so, halts execution and returns 200 OK.
 * Looks for the customer in Fat Free CRM.
@@ -58,7 +58,7 @@ Note: that the above actions take place inside a transaction. This means that in
 
 The ```/vend/customer_update``` route responds to Vend's ```customer.update``` webhook. When fired, the following happens:
 
-* Sets the ```PaperTrail.whodunnit``` field to the default user (set in the Admin -> Vend tab).
+* Sets the ```PaperTrail.request.whodunnit``` field to the default user (set in the Admin -> Vend tab).
  * The ```customer_update``` hook from Vend does not include the user who made the update so we always the default user.
 * Checks to see if the customer name is in the exclusion list (see Admin tab -> Vend). If so, halts execution and returns 200 OK.
 * Looks for the customer in Fat Free CRM.

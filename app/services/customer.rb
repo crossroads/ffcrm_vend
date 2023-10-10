@@ -4,7 +4,7 @@ class Customer
   def initialize(params)
     @params = JSON.parse(params['payload'])
     FfcrmVend.log("Processing customer update #{@params}")
-    PaperTrail.whodunnit = FfcrmVend.default_user.try(:id)
+    PaperTrail.request.whodunnit = user.try(:id)
   end
 
   def create
@@ -71,6 +71,7 @@ class Customer
       contact.first_name = contact_params['first_name'] unless contact_params['first_name'].blank?
       contact.last_name = contact_params['last_name'] unless contact_params['last_name'].blank?
       contact.phone = contact_params['phone'] unless contact_params['phone'].blank?
+      contact.user = user # who made the update
     end
 
     # Set address if none exists
@@ -85,13 +86,13 @@ class Customer
       country = params['contact']['physical_country_id']
 
       if Setting.compound_address
-        address = Address.new(:street1 => street1, :street2 => street2, :city => city,
-          :state => state, :zipcode => zipcode, :country => country, :address_type => "Business")
+        address = Address.new(street1: street1, street2: street2, city: city,
+          state: state, zipcode: zipcode, country: country, address_type: "Business")
       else
-        address = Address.new(:full_address => "#{street1}\n#{street2}\n#{city}\n#{state}\n#{zipcode}\n#{country}")
+        address = Address.new(full_address: "#{street1}\n#{street2}\n#{city}\n#{state}\n#{zipcode}\n#{country}")
       end
 
-      contact.business_address = address unless address.blank?
+      contact.addresses << address unless address.blank?
     end
     contact.save
   end
@@ -110,6 +111,17 @@ class Customer
         contact.alt_email = email_address
       end
     end
+  end
+
+  # Try to pick the user that called the update
+  # If not found or user name is blank, use the default user
+  def user
+    return @user unless @user.nil?
+    if (user_params = params['user']).present?
+      name = user_params['name']
+      @user = (User.where(:username => name).first || User.where(:email => name).first) if name.present?
+    end
+    @user ||= FfcrmVend.default_user
   end
 
 end

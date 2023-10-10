@@ -1,4 +1,4 @@
-class AddVendCustomerIdToContacts < ActiveRecord::Migration
+class AddVendCustomerIdToContacts < ActiveRecord::Migration[4.2]
   def up
     # Add customfield to contacts programatically
     unless Field.where(:name => 'cf_vend_customer_id').size > 0

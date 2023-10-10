@@ -1,7 +1,9 @@
 class Admin::FfcrmVendController < Admin::ApplicationController
 
-  before_filter :require_user
-  before_filter "set_current_tab('admin/ffcrm_vend')", :only => [ :index, :update ]
+  before_action :require_user
+  before_action only: [:index, :update] do
+    set_current_tab('admin/ffcrm_vend')
+  end
 
   # GET /admin/ffcrm_vend
   #----------------------------------------------------------------------------
@@ -13,7 +15,7 @@ class Admin::FfcrmVendController < Admin::ApplicationController
   def update
     FfcrmVend.config.update!(params)
     flash[:info] = "Settings saved."
-    redirect_to(:action => :index)
+    redirect_to(action: "index")
   end
 
 end

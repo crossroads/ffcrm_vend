@@ -1,6 +1,6 @@
 class VendController < ActionController::Base
 
-  before_filter :authenticate
+  before_action :authenticate
 
   def customer_update
     Customer.new(params).create

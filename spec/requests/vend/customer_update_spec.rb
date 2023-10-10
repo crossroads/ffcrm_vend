@@ -7,7 +7,7 @@ RSpec.describe VendController, type: "controller" do
 
   it 'should create a contact for a new customer_id' do
     expect {
-      post :customer_update, format: "json", payload: customer_json
+      post :customer_update, format: "json", params: { payload: customer_json }
     }.to change(Contact, :count).by(1)
 
     contact = Contact.find_by_cf_vend_customer_id(customer['id'])
@@ -27,8 +27,8 @@ RSpec.describe VendController, type: "controller" do
   end
 
   it 'rejected token' do
-    Setting.ffcrm_vend = Setting.ffcrm_vend.merge(:token => SecureRandom.urlsafe_base64)
-    post(:customer_update, format: "json", payload: customer_json, token: 'XYZ')
+    Setting["ffcrm_vend"] = Setting["ffcrm_vend"].merge(token: SecureRandom.urlsafe_base64)
+    post(:customer_update, format: "json", params: { payload: customer_json, token: 'XYZ' } )
     expect(response.response_code).to eql(401)
   end
 
