@@ -18,8 +18,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails"
   s.add_dependency "fat_free_crm", "~> 0.21.0"
-  s.add_dependency 'ransack', '< 4'
-  s.add_dependency 'ransack_ui'
 
   s.add_development_dependency 'pg'
   s.add_development_dependency 'rspec-rails'
