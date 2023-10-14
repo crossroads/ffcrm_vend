@@ -59,7 +59,7 @@ PATH
   remote: .
   specs:
     ffcrm_vend (0.0.1)
-      fat_free_crm (~> 0.21.0)
+      fat_free_crm
       rails
 
 GEM
@@ -340,7 +340,6 @@ DEPENDENCIES
   byebug
   factory_bot_rails
   fat_free_crm!
-  ffaker
   ffcrm_vend!
   jquery-rails
   listen
