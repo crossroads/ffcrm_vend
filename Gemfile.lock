@@ -16,8 +16,7 @@ GIT
 
 GIT
   remote: https://github.com/fatfreecrm/fat_free_crm.git
-  revision: 76ffdced4d7c262543d5b169238700789fd2e32c
-  branch: gemspec-fixes
+  revision: f14782ac1d2dbe156e4956c6edbe7a39914b5cdf
   specs:
     fat_free_crm (0.21.0)
       activemodel-serializers-xml
@@ -150,7 +149,7 @@ GEM
     css_parser (1.16.0)
       addressable
     date (3.3.3)
-    devise (4.9.2)
+    devise (4.9.3)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 4.1.0)
@@ -282,7 +281,7 @@ GEM
       ffi (~> 1.0)
     request_store (1.5.1)
       rack (>= 1.4)
-    responders (3.1.0)
+    responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
     rspec-core (3.12.2)
@@ -308,7 +307,7 @@ GEM
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
     select2-rails (4.0.13)
-    simple_form (5.2.0)
+    simple_form (5.3.0)
       actionpack (>= 5.2)
       activemodel (>= 5.2)
     sprockets (4.2.1)
