@@ -1,9 +1,6 @@
 class Admin::FfcrmVendController < Admin::ApplicationController
 
-  before_action :require_user
-  before_action only: [:index, :update] do
-    set_current_tab('admin/ffcrm_vend')
-  end
+  before_action -> { set_current_tab('admin/ffcrm_vend') }, only: [:index, :update]
 
   # GET /admin/ffcrm_vend
   #----------------------------------------------------------------------------
